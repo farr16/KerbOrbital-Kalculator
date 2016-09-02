@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
+/** CalculatorFragment
  * Created by Matthew on 9/2/2016.
+ *
+ * This fragment will contain code for initializing GUI elements for the calculator interface and
+ * getting input from user input about the orbital transfer to be performed.
  */
 public class CalculatorFragment extends Fragment {
 
