@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">KerbOrbital Kalculator</string>
+    <string name="calculator_fragment_text">Calculator Fragment</string>
+    <string name="orbital_display_fragment_text">Orbital Display Fragment</string>
+</resources>
