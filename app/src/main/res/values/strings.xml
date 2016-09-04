@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">KerbOrbital Kalculator</string>
-    <string name="calculator_fragment_text">Calculator Fragment</string>
-    <string name="orbital_display_fragment_text">Orbital Display Fragment</string>
+    <string name="orbit_display_label">Orbital Display Fragment</string>
+    <string name="parking_orbit_label">Parking orbit:</string>
+    <string name="km_label">km above surface</string>
+    <string name="reset_button_label">Reset</string>
+    <string name="calculate_button_label">Calculate</string>
+    <string name="phase_angle_display_label">Phase angle: </string>
+    <string name="ejection_angle_display_label">Ejection angle: </string>
+    <string name="ejection_velocity_display_label">Ejection velocity: </string>
+    <string name="ejection_burn_deltaV_display_label">Ejection burn Δv: </string>
+    <string name="test_string_please_ignore">Test</string>
 </resources>
