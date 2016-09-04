@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">KerbOrbital Kalculator</string>
     <string name="orbit_display_label">Orbital Display Fragment</string>
+    <string name="phase_angle_display_fragment_label">Phase Angle Display Fragment</string>
+    <string name="ejection_angle_display_fragment_label">Ejection Angle Display Fragment</string>
     <string name="parking_orbit_label">Parking orbit:</string>
     <string name="km_label">km above surface</string>
     <string name="reset_button_label">Reset</string>

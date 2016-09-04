@@ -24,17 +24,19 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         if (pos == 0)
             return new CalculatorFragment();
         else if (pos == 1)
-            return new OrbitalDisplayFragment();
+            return new PhaseAngleDisplayFragment();
+        else if (pos == 2)
+            return new EjectionAngleDisplayFragment();
         else
             return null;
     }
 
     @Override
     /** getCount
-     * Returns the number of tabs in the application interface, currently fixed at two.
+     * Returns the number of tabs in the application interface, currently fixed at three.
      */
     public int getCount() {
-        return 2;
+        return 3;
     }
 
 }
