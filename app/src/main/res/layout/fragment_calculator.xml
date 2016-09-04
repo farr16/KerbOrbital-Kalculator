@@ -3,18 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Small"
+        android:layout_alignParentTop="true"
+        android:text="@string/origin_planet_label"
+        android:id="@+id/OriginPlanetLabel" />
+
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/originPlanetSelector"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/OriginPlanetLabel"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@android:style/TextAppearance.Small"
+        android:layout_below="@+id/originPlanetSelector"
+        android:text="@string/destination_planet_label"
+        android:id="@+id/destinationPlanetLabel" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/destinationPlanetSelector"
-        android:layout_below="@+id/originPlanetSelector"
+        android:layout_below="@+id/destinationPlanetLabel"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
