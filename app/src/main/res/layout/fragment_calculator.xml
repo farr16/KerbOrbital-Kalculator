@@ -8,36 +8,36 @@
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Small"
         android:layout_alignParentTop="true"
-        android:text="@string/origin_planet_label"
-        android:id="@+id/OriginPlanetLabel" />
+        android:text="@string/origin_label"
+        android:id="@+id/OriginLabel" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/originPlanetSelector"
-        android:layout_below="@+id/OriginPlanetLabel"
+        android:id="@+id/originSelector"
+        android:layout_below="@+id/OriginLabel"
         android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@android:style/TextAppearance.Small"
-        android:layout_below="@+id/originPlanetSelector"
-        android:text="@string/destination_planet_label"
-        android:id="@+id/destinationPlanetLabel" />
+        android:layout_below="@+id/originSelector"
+        android:text="@string/destination_label"
+        android:id="@+id/destinationLabel" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/destinationPlanetSelector"
-        android:layout_below="@+id/destinationPlanetLabel"
+        android:id="@+id/destinationSelector"
+        android:layout_below="@+id/destinationLabel"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/destinationPlanetSelector"
+        android:layout_below="@+id/destinationSelector"
         android:layout_centerHorizontal="true"
         android:id="@+id/ParkingOrbitPanel">
 
