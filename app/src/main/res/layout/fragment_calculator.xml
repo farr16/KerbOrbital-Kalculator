@@ -75,18 +75,18 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/calculate_button_label"
-        android:id="@+id/calculateButton"
-        android:layout_alignTop="@+id/space"
-        android:layout_toRightOf="@id/space"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/reset_button_label"
         android:id="@+id/resetButton"
         android:layout_alignTop="@+id/space"
         android:layout_toLeftOf="@+id/calculateButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/calculate_button_label"
+        android:id="@+id/calculateButton"
+        android:layout_alignTop="@+id/space"
+        android:layout_toRightOf="@id/space"/>
 
     <LinearLayout
         android:orientation="vertical"
@@ -96,7 +96,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="end"
-        android:id="@+id/DisplayPanel">
+        android:id="@+id/LabelPanel">
 
         <TextView
             android:layout_width="wrap_content"
@@ -136,9 +136,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignTop="@+id/DisplayPanel"
-        android:layout_toRightOf="@+id/DisplayPanel"
-        android:layout_toEndOf="@+id/DisplayPanel">
+        android:layout_alignTop="@+id/LabelPanel"
+        android:layout_toRightOf="@+id/LabelPanel"
+        android:layout_toEndOf="@+id/LabelPanel"
+        android:id="@+id/DisplayPanel">
 
         <TextView
             android:layout_width="wrap_content"
