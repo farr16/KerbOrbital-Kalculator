@@ -6,7 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 /** CalculatorFragment
  * Created by Matthew on 9/2/2016.
@@ -16,21 +21,64 @@ import android.widget.Spinner;
  */
 public class CalculatorFragment extends Fragment {
 
+
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View calcView = inflater.inflate(R.layout.fragment_calculator, container, false);
+        final View calcView = inflater.inflate(R.layout.fragment_calculator, container, false);
 
         // Initialize array of planets to be used in origin and destination spinners
-        String[] planets = {"Moho", "Eve", "Kerbin", "Duna", "Dres", "Jool", "Eeloo"};
+        final String[] planets = {"Moho", "Eve", "Kerbin", "Duna", "Dres", "Jool", "Eeloo"};
 
         // Obtain references to layout spinners in code
-        Spinner origin = (Spinner) calcView.findViewById(R.id.originSelector);
-        Spinner destination = (Spinner) calcView.findViewById(R.id.destinationSelector);
+        final Spinner origin = (Spinner) calcView.findViewById(R.id.originSelector);
+        final Spinner destination = (Spinner) calcView.findViewById(R.id.destinationSelector);
+
+        // Obtain references to layout buttons in code
+        final Button calculateButton = (Button) calcView.findViewById(R.id.calculateButton);
+        final Button resetButton = (Button) calcView.findViewById(R.id.resetButton);
+
+        // Obtain reference to layout EditText in code
+        final EditText parkingOrbitEntry = (EditText) calcView.findViewById(R.id.parkingOrbitEntry);
+
+        // Obtain reference to labels we will be editing in code
+        final TextView phaseAngleDisplay = (TextView) calcView.findViewById(R.id.phaseAngleDisplay);
+        final TextView ejectionAngleDisplay = (TextView) calcView.findViewById(R.id.ejectionAngleDisplay);
+        final TextView ejectionVelocityDisplay= (TextView) calcView.findViewById(R.id.ejectionVelocityDisplay);
+        final TextView ejectionBurnDeltaVDisplay = (TextView) calcView.findViewById(R.id.ejectionBurnDeltaVDisplay);
 
         // Set array adapters to populate spinners with choices
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, planets);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         origin.setAdapter(adapter);
         destination.setAdapter(adapter);
+
+        // Set onClick behaviors for layout buttons
+        calculateButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Test code. Tests if getting strings from spinners works properly, if getting
+                // the number from EditText works properly, and if setting text on TextViews works
+                // properly
+                phaseAngleDisplay.setText(origin.getSelectedItem().toString());
+                ejectionAngleDisplay.setText(destination.getSelectedItem().toString());
+                try {
+                    int parkingOrbit = Integer.parseInt(parkingOrbitEntry.getText().toString());
+                    ejectionVelocityDisplay.setText("" + parkingOrbit);
+                }
+                catch (NumberFormatException e) {
+                    ejectionVelocityDisplay.setText("Enter an integer for parking orbit");
+                }
+                ejectionBurnDeltaVDisplay.setText("did it work?");
+            }
+        });
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                phaseAngleDisplay.setText("");
+                ejectionAngleDisplay.setText("");
+                ejectionVelocityDisplay.setText("");
+                ejectionBurnDeltaVDisplay.setText("");
+            }
+        });
+
 
         return calcView;
     }
