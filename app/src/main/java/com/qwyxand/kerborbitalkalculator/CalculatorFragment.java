@@ -27,7 +27,7 @@ public class CalculatorFragment extends Fragment {
         Spinner destination = (Spinner) calcView.findViewById(R.id.destinationSelector);
 
         // Set array adapters to populate spinners with choices
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, planets);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, planets);
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         origin.setAdapter(adapter);
         destination.setAdapter(adapter);
