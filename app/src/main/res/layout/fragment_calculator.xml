@@ -12,7 +12,7 @@
         android:id="@+id/OriginLabel" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/originSelector"
         android:layout_below="@+id/OriginLabel"
@@ -27,7 +27,7 @@
         android:id="@+id/destinationLabel" />
 
     <Spinner
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/destinationSelector"
         android:layout_below="@+id/destinationLabel"
