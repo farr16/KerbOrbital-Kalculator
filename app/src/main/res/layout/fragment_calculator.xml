@@ -88,11 +88,19 @@
         android:layout_alignTop="@+id/space"
         android:layout_toRightOf="@id/space"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="34sp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/space"
+        android:id="@+id/warningMessageDisplay" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/space"
+        android:layout_below="@+id/warningMessageDisplay"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:gravity="end"
@@ -145,7 +153,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/test_string_please_ignore"
             android:id="@+id/phaseAngleDisplay"
             android:layout_marginTop="8dp"/>
 
@@ -153,7 +160,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/test_string_please_ignore"
             android:id="@+id/ejectionAngleDisplay"
             android:layout_marginTop="8dp"/>
 
@@ -161,7 +167,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/test_string_please_ignore"
             android:id="@+id/ejectionVelocityDisplay"
             android:layout_marginTop="8dp"/>
 
@@ -169,7 +174,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/test_string_please_ignore"
             android:id="@+id/ejectionBurnDeltaVDisplay"
             android:layout_marginTop="8dp"/>
 

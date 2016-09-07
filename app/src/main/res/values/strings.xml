@@ -12,5 +12,6 @@
     <string name="ejection_angle_display_label">Ejection angle: </string>
     <string name="ejection_velocity_display_label">Ejection velocity: </string>
     <string name="ejection_burn_deltaV_display_label">Ejection burn Δv: </string>
-    <string name="test_string_please_ignore">Test</string>
+    <string name="planet_selection_warning">Please select separate origin and destination\n</string>
+    <string name="parking_orbit_input_warning">Please enter a positive integer for parking orbit</string>
 </resources>
