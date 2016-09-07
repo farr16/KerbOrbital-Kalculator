@@ -4,7 +4,25 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity
+    implements CalculatorFragment.OnCalculationListener{
+
+    private String origin;
+    private String destination;
+    private float phaseAngle;
+    private float ejectionAngle;
+
+    public void onCalculation(String orig, String dest, float phase, float eject) {
+        origin = orig;
+        destination = dest;
+        phaseAngle = phase;
+        ejectionAngle = eject;
+
+        System.out.println(origin);
+        System.out.println(destination);
+        System.out.println("Phase Angle: " + phaseAngle);
+        System.out.println("Ejection Angle: " + ejectionAngle);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

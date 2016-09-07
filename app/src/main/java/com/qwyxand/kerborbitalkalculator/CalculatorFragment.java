@@ -1,5 +1,7 @@
 package com.qwyxand.kerborbitalkalculator;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +20,12 @@ import android.widget.TextView;
  * getting input from user input about the orbital transfer to be performed.
  */
 public class CalculatorFragment extends Fragment {
+
+    OnCalculationListener mCallback;
+
+    public interface OnCalculationListener {
+        void onCalculation(String orig, String dest, float phase, float eject );
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View calcView = inflater.inflate(R.layout.fragment_calculator, container, false);
@@ -78,9 +86,7 @@ public class CalculatorFragment extends Fragment {
                     return;
                 }
 
-                System.out.println(orig);
-                System.out.println(dest);
-                System.out.println("Parking orbit: " + parkingOrbit);
+                mCallback.onCalculation(orig, dest, 9f, 10f);
 
             }
         });
@@ -95,7 +101,23 @@ public class CalculatorFragment extends Fragment {
             }
         });
 
-
         return calcView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity activity = null;
+
+        if (context instanceof Activity)
+            activity = (Activity) context;
+
+        try {
+            mCallback = (OnCalculationListener) activity;
+        }
+        catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + "must implement OnCalculationListener");
+        }
     }
 }
