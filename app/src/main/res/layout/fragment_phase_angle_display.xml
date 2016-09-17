@@ -8,6 +8,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/phase_angle_display_fragment_label"
-        android:id="@+id/fragment_label"
+        android:id="@+id/phaseAngleDisplayFragmentLabel"
         android:layout_gravity="center" />
 </FrameLayout>
