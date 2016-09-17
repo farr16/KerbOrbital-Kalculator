@@ -7,16 +7,12 @@ import android.support.v4.view.ViewPager;
 public class MainActivity extends FragmentActivity
     implements CalculatorFragment.OnCalculationListener{
 
-    private String origin;
-    private String destination;
-    private float phaseAngle;
-    private float ejectionAngle;
 
     public void onCalculation(String orig, String dest, float phase, float eject) {
-        origin = orig;
-        destination = dest;
-        phaseAngle = phase;
-        ejectionAngle = eject;
+        String origin = orig;
+        String destination = dest;
+        float phaseAngle = phase;
+        float ejectionAngle = eject;
 
         System.out.println(origin);
         System.out.println(destination);
