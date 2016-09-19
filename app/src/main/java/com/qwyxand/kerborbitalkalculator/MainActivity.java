@@ -4,20 +4,22 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-public class MainActivity extends FragmentActivity
-    implements CalculatorFragment.OnCalculationListener{
+public class MainActivity extends FragmentActivity implements CalculatorFragment.OnCalculationListener{
 
+    private CustomFragmentPagerAdapter adapter;
 
     public void onCalculation(String orig, String dest, float phase, float eject) {
-        String origin = orig;
-        String destination = dest;
-        float phaseAngle = phase;
-        float ejectionAngle = eject;
+        System.out.println("MainActivity.onCalculation()");
+        System.out.println("Origin: " + orig
+                            + "\nDestination: " + dest
+                            + "\nPhase Angle: " + phase
+                            + "\nEjection Angle: " + eject);
+        adapter.setOrigin(orig);
+        adapter.setDestination(dest);
+        adapter.setPhaseAngle(phase);
+        adapter.setEjectionAngle(eject);
 
-        System.out.println(origin);
-        System.out.println(destination);
-        System.out.println("Phase Angle: " + phaseAngle);
-        System.out.println("Ejection Angle: " + ejectionAngle);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -31,7 +33,7 @@ public class MainActivity extends FragmentActivity
         ViewPager viewPager = (ViewPager) findViewById(R.id.ViewPager);
 
         // Create an adapter which will take an index and give the fragment to be displayed
-        CustomFragmentPagerAdapter adapter = new CustomFragmentPagerAdapter(getSupportFragmentManager());
+        adapter = new CustomFragmentPagerAdapter(getSupportFragmentManager());
 
         // Set the created adapter to be the adapter for the viewPager
         viewPager.setAdapter(adapter);
