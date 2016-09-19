@@ -22,8 +22,8 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     public CustomFragmentPagerAdapter(FragmentManager fm){
         super(fm);
         // Default values for initial view setup
-        origin = "Kerbin";
-        destination = "Duna";
+        origin = "";
+        destination = "";
         phaseAngle = Float.NEGATIVE_INFINITY;
         ejectionAngle = Float.NEGATIVE_INFINITY;
     }
@@ -37,10 +37,10 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
             return new CalculatorFragment();
         }
         else if (pos == 1) {
-            return PhaseAngleDisplayFragment.newInstance(origin, destination, phaseAngle);
+            return new PhaseAngleDisplayFragment();
         }
         else if (pos == 2) {
-            return EjectionAngleDisplayFragment.newInstance(origin, ejectionAngle);
+            return new EjectionAngleDisplayFragment();
         }
         else
             return null;
@@ -65,7 +65,7 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
      */
     public int getCount() {return PAGE_COUNT;}
 
-    /* Setter methods for the viewpager dataset variables
+    /* Setter methods for the viewpager data set variables
     * */
     public void setOrigin (String orig) {origin = orig;}
 

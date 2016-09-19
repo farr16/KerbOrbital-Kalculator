@@ -9,11 +9,6 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
     private CustomFragmentPagerAdapter adapter;
 
     public void onCalculation(String orig, String dest, float phase, float eject) {
-        System.out.println("MainActivity.onCalculation()");
-        System.out.println("Origin: " + orig
-                            + "\nDestination: " + dest
-                            + "\nPhase Angle: " + phase
-                            + "\nEjection Angle: " + eject);
         adapter.setOrigin(orig);
         adapter.setDestination(dest);
         adapter.setPhaseAngle(phase);
@@ -31,6 +26,7 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
 
         // Find the view pager that will allow the user to swipe between fragments
         ViewPager viewPager = (ViewPager) findViewById(R.id.ViewPager);
+        viewPager.setOffscreenPageLimit(2);
 
         // Create an adapter which will take an index and give the fragment to be displayed
         adapter = new CustomFragmentPagerAdapter(getSupportFragmentManager());

@@ -17,37 +17,16 @@ import android.widget.TextView;
  */
 public class PhaseAngleDisplayFragment extends Fragment {
 
-    private static final String originLocation = "com.qwyxand.kerborbitalkalculator.origin";
-    private static final String destinationLocation = "com.qwyxand.kerborbitalkalculator.destination";
-    private static final String phaseAngleLocation = "com.qwyxand.kerborbitalkalculator.phaseAngle";
-
-
-    private String origin;
-    private String destination;
-    private float phaseAngle;
+    private String origin = "";
+    private String destination = "";
+    private float phaseAngle = Float.NEGATIVE_INFINITY;
 
     private TextView phaseDisplay;
-
-    public static PhaseAngleDisplayFragment newInstance(String orig, String dest, float phase) {
-        Bundle args = new Bundle();
-        args.putString(originLocation, orig);
-        args.putString(destinationLocation, dest);
-        args.putFloat(phaseAngleLocation, phase);
-
-        PhaseAngleDisplayFragment fragment = new PhaseAngleDisplayFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        origin = args.getString(originLocation);
-        destination = args.getString(destinationLocation);
-        phaseAngle = args.getFloat(phaseAngleLocation);
     }
 
     @Override
@@ -65,11 +44,13 @@ public class PhaseAngleDisplayFragment extends Fragment {
     }
 
     public void updatePhaseDisplay(String orig, String dest, float phase) {
-        origin = orig;
-        destination = dest;
-        phaseAngle = phase;
 
-        String content = "Origin: " + origin + "\nDestination: " + "\nPhase Angle: " + phaseAngle;
+        origin = orig;
+        phaseAngle = phase;
+        destination = dest;
+
+        String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
+                + phaseAngle;
         phaseDisplay.setText(content);
     }
 }

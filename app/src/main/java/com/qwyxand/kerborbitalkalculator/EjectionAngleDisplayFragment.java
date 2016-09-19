@@ -17,33 +17,14 @@ import android.widget.TextView;
  */
 public class EjectionAngleDisplayFragment extends Fragment {
 
-    private static final String originLocation = "com.qwyxand.kerborbitalkalculator.origin";
-    private static final String ejectionAngleLocation = "com.qwyxand.kerborbitalkalculator.ejectionAngle";
-
-    private String origin;
-    private float ejectionAngle;
+    private String origin = "";
+    private float ejectionAngle = Float.NEGATIVE_INFINITY;
 
     private TextView ejectionDisplay;
 
-    public static EjectionAngleDisplayFragment newInstance(String orig, float phase) {
-
-        Bundle args = new Bundle();
-        args.putString(originLocation, orig);
-        args.putFloat(ejectionAngleLocation, phase);
-
-        EjectionAngleDisplayFragment fragment = new EjectionAngleDisplayFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-        Bundle args = getArguments();
-        origin = args.getString(originLocation);
-        ejectionAngle = args.getFloat(ejectionAngleLocation);
     }
 
     @Override
@@ -63,7 +44,9 @@ public class EjectionAngleDisplayFragment extends Fragment {
         origin = orig;
         ejectionAngle = eject;
 
+        System.out.println("updateEjectionDisplay()");
         String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle;
+        System.out.println(content);
         ejectionDisplay.setText(content);
 
     }
