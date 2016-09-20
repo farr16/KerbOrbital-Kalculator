@@ -21,6 +21,8 @@ public class PhaseAngleDisplayFragment extends Fragment {
     private String destination = "";
     private float phaseAngle = Float.NEGATIVE_INFINITY;
 
+    // For now, a TextView is used to display the calculated phase angle
+    // Later, this will be drawn graphically
     private TextView phaseDisplay;
 
     @Override
@@ -43,8 +45,17 @@ public class PhaseAngleDisplayFragment extends Fragment {
         return view;
     }
 
+    /** updatePhaseDisplay
+     *
+     * Updates the view for the PhaseDisplayFragment.
+     * Called in the adapter's getItemPosition method. Updates the view when the Calculate button
+     * is pressed in the Calculator Fragment
+     *
+     * @param orig The origin planet selected in the CalculatorFragment view
+     * @param dest The destination planet selected in the CalculatorFragment view
+     * @param phase The phase angle calculated by the calculator
+     */
     public void updatePhaseDisplay(String orig, String dest, float phase) {
-
         origin = orig;
         phaseAngle = phase;
         destination = dest;

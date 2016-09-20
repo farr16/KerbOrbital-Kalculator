@@ -21,6 +21,7 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     // constructor
     public CustomFragmentPagerAdapter(FragmentManager fm){
         super(fm);
+
         // Default values for initial view setup
         origin = "";
         destination = "";
@@ -47,6 +48,12 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    /** getItemPosition
+     *
+     * Returns the position of a given Fragment object. Overwritten to allow for updating of views
+     * by the adapter when notifyDatasetChanged() is called, by calling the given object's public
+     * update method.
+     */
     public int getItemPosition(Object object) {
         if (object instanceof CalculatorFragment)
             ;

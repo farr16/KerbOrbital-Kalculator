@@ -20,6 +20,8 @@ public class EjectionAngleDisplayFragment extends Fragment {
     private String origin = "";
     private float ejectionAngle = Float.NEGATIVE_INFINITY;
 
+    // For now, a TextView is used to display the calculated phase angle
+    // Later, this will be drawn graphically
     private TextView ejectionDisplay;
 
     @Override
@@ -40,13 +42,20 @@ public class EjectionAngleDisplayFragment extends Fragment {
         return view;
     }
 
+    /** updateEjectionDisplay
+     *
+     * Updates the view for the EjectionDisplayFragment.
+     * Called in the adapter's getItemPosition method. Updates the view when the Calculate button
+     * is pressed in the Calculator Fragment
+     *
+     * @param orig The origin planet selected in the CalculatorFragment view
+     * @param eject The ejection angle calculated by the calculator
+     */
     public void updateEjectionDisplay(String orig, float eject) {
         origin = orig;
         ejectionAngle = eject;
 
-        System.out.println("updateEjectionDisplay()");
         String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle;
-        System.out.println(content);
         ejectionDisplay.setText(content);
 
     }
