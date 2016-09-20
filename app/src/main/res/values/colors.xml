@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colors for the app theme -->
     <color name="colorPrimary">#8BC34A</color>
     <color name="colorPrimaryDark">#33691E</color>
     <color name="colorAccent">#9575CD</color>
+
+    <!-- Colors for the orbital body displays -->
+    <color name="colorMohoDisplay">#FA7850</color>
+    <color name="colorEveDisplay">#8214A0</color>
+    <color name="colorKerbinDisplay">#005AC8</color>
+    <color name="colorDunaDisplay">#AA0A3C</color>
+    <color name="colorDresDisplay">#A0FA82</color>
+    <color name="colorJoolDisplay">#0AB45A</color>
+    <color name="colorEelooDisplay">#14D2DC</color>
+    <color name="colorKerbolDisplay">#F0F032</color>
 </resources>
