@@ -70,8 +70,6 @@ public class CalculatorFragment extends Fragment {
                 String warnings = "";
                 int parkingOrbit = -1;
 
-                //String orig = origin.getSelectedItem().toString();
-                //String dest = destination.getSelectedItem().toString();
                 int origIndex = origin.getSelectedItemPosition();
                 int destIndex = destination.getSelectedItemPosition();
 
@@ -102,8 +100,6 @@ public class CalculatorFragment extends Fragment {
                 double tTransfer = Math.PI * Math.sqrt( Math.pow(orig.sma + dest.sma, 3) / (8 * cent.mu) );
                 double angTravel = Math.sqrt(cent.mu/dest.sma) * tTransfer/dest.sma * 180/Math.PI;
                 double phase = (180 - angTravel) % 360;
-                //String phaseText = "" + phase;
-                //phaseAngleDisplay.setText(phaseText);
 
                 // Calculate the ejection velocity
                 double parkR = orig.radius + parkingOrbit; // Radius of parking orbit from center of origin
@@ -119,8 +115,6 @@ public class CalculatorFragment extends Fragment {
 
                 // Calculate the deltaV required for the exit burn
                 double deltaV = (ejectV - Math.sqrt(orig.mu/parkR));
-                //String deltaVText = "" + deltaV * 1000;
-                //ejectionBurnDeltaVDisplay.setText(deltaVText);
 
                 // Calculate the angle for the exit burn
                 double eta = ejectV * ejectV / 2 - orig.mu / parkR;
@@ -138,8 +132,6 @@ public class CalculatorFragment extends Fragment {
                     double ejectRad = Math.acos(1/e);
                     ejectDeg = (180 - ejectRad * 180/Math.PI) % 360;
                 }
-                //String ejectDegText = "" + ejectDeg;
-                //ejectionAngleDisplay.setText(ejectDegText);
 
                 phase = new BigDecimal(phase).setScale(2, RoundingMode.HALF_UP).doubleValue();
                 String phaseText = " " + phase;
@@ -221,7 +213,7 @@ public class CalculatorFragment extends Fragment {
 
 /** Body
  * Stores information about one of the bodies in the Kerbol system (either a planet or the star Kerbol)
- * Class stores public final variables, essentially acting as a C struct
+ * Class stores final variables, essentially acting as a C struct
  *
  * name stores the name of the body
  * mu stores the body's standard gravitational parameter
@@ -230,13 +222,13 @@ public class CalculatorFragment extends Fragment {
  * soi stores the body's sphere of influence
  */
 class Body {
-    public final String name;
-    public final float mu;
-    public final float sma;
-    public final int radius;
-    public final float soi;
+    final String name;
+    final float mu;
+    final float sma;
+    final int radius;
+    final float soi;
 
-    public Body(String _name, float _mu, float _sma, int _radius, float _soi) {
+    Body(String _name, float _mu, float _sma, int _radius, float _soi) {
         name = _name;
         mu = _mu;
         sma = _sma;
