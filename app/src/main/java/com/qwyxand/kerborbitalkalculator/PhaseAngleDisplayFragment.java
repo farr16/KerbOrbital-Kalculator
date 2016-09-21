@@ -55,13 +55,15 @@ public class PhaseAngleDisplayFragment extends Fragment {
      * @param dest The destination planet selected in the CalculatorFragment view
      * @param phase The phase angle calculated by the calculator
      */
-    public void updatePhaseDisplay(String orig, String dest, float phase) {
+    public void updatePhaseDisplay(String orig, String dest, boolean inner, int origColor, int destColor, float phase) {
+
         origin = orig;
         phaseAngle = phase;
         destination = dest;
 
         String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
-                + phaseAngle;
+                        + phaseAngle + "\nInner: " + inner + "\nOrigin Color: " + Integer.toHexString(origColor)
+                        + "\nDestination Color: " + Integer.toHexString(destColor);
         phaseDisplay.setText(content);
     }
 }

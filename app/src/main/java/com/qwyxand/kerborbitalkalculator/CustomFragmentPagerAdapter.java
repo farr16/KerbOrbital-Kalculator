@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  *
  * Manages behavior of swiping between tabs.
  */
-public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
+class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 3;
 
@@ -58,10 +58,10 @@ public class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         if (object instanceof CalculatorFragment)
             ;
         else if (object instanceof PhaseAngleDisplayFragment) {
-            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, phaseAngle);
+            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, true, 0, 0, phaseAngle);
         }
         else if (object instanceof EjectionAngleDisplayFragment) {
-            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, ejectionAngle);
+            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, 0 , ejectionAngle);
         }
         return super.getItemPosition(object);
     }

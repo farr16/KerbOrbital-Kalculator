@@ -21,6 +21,8 @@ import android.widget.TextView;
  */
 public class CalculatorFragment extends Fragment {
 
+    final String[] planets = {"Moho", "Eve", "Kerbin", "Duna", "Dres", "Jool", "Eeloo"};
+
     OnCalculationListener mCallback;
 
     public interface OnCalculationListener {
@@ -29,9 +31,6 @@ public class CalculatorFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View calcView = inflater.inflate(R.layout.fragment_calculator, container, false);
-
-        // Initialize array of planets to be used in origin and destination spinners
-        final String[] planets = {"Moho", "Eve", "Kerbin", "Duna", "Dres", "Jool", "Eeloo"};
 
         // Obtain references to layout spinners in code
         final Spinner origin = (Spinner) calcView.findViewById(R.id.originSelector);
@@ -90,6 +89,7 @@ public class CalculatorFragment extends Fragment {
 
             }
         });
+
         resetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 phaseAngleDisplay.setText("");
@@ -105,6 +105,10 @@ public class CalculatorFragment extends Fragment {
     }
 
     @Override
+    /** onAttach
+     * Fragment lifecycle method called when the fragment is first associated with its activity
+     * Overriden to check that the activity the fragment is attached to implements its listener
+     */
     public void onAttach(Context context) {
         super.onAttach(context);
 

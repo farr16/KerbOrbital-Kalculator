@@ -51,11 +51,12 @@ public class EjectionAngleDisplayFragment extends Fragment {
      * @param orig The origin planet selected in the CalculatorFragment view
      * @param eject The ejection angle calculated by the calculator
      */
-    public void updateEjectionDisplay(String orig, float eject) {
+    public void updateEjectionDisplay(String orig, int color, float eject) {
         origin = orig;
         ejectionAngle = eject;
 
-        String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle;
+        String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle
+                        + "\nColor:" + Integer.toHexString(color);
         ejectionDisplay.setText(content);
 
     }
