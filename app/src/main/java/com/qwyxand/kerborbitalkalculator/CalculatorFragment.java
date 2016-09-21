@@ -22,10 +22,19 @@ import java.math.RoundingMode;
  * This fragment will contain code for initializing GUI elements for the calculator interface and
  * getting input from user input about the orbital transfer to be performed.
  */
-public class CalculatorFragment extends Fragment {
+public class CalculatorFragment extends Fragment implements View.OnClickListener{
 
-    //final String[] planets = {"Moho", "Eve", "Kerbin", "Duna", "Dres", "Jool", "Eeloo"};
     Body[] bodies;
+
+    private Spinner origin;
+    private Spinner destination;
+    private EditText parkingOrbitEntry;
+
+    private TextView warningMessageDisplay;
+    private TextView phaseAngleDisplay;
+    private TextView ejectionAngleDisplay;
+    private TextView ejectionVelocityDisplay;
+    private TextView ejectionBurnDeltaVDisplay;
 
     OnCalculationListener mCallback;
 
@@ -40,22 +49,22 @@ public class CalculatorFragment extends Fragment {
         bodies = initBodies();
 
         // Obtain references to layout spinners in code
-        final Spinner origin = (Spinner) calcView.findViewById(R.id.originSelector);
-        final Spinner destination = (Spinner) calcView.findViewById(R.id.destinationSelector);
+        origin = (Spinner) calcView.findViewById(R.id.originSelector);
+        destination = (Spinner) calcView.findViewById(R.id.destinationSelector);
 
         // Obtain references to layout buttons in code
         final Button calculateButton = (Button) calcView.findViewById(R.id.calculateButton);
         final Button resetButton = (Button) calcView.findViewById(R.id.resetButton);
 
         // Obtain reference to layout EditText in code
-        final EditText parkingOrbitEntry = (EditText) calcView.findViewById(R.id.parkingOrbitEntry);
+        parkingOrbitEntry = (EditText) calcView.findViewById(R.id.parkingOrbitEntry);
 
         // Obtain reference to labels we will be editing in code
-        final TextView warningMessageDisplay = (TextView) calcView.findViewById(R.id.warningMessageDisplay);
-        final TextView phaseAngleDisplay = (TextView) calcView.findViewById(R.id.phaseAngleDisplay);
-        final TextView ejectionAngleDisplay = (TextView) calcView.findViewById(R.id.ejectionAngleDisplay);
-        final TextView ejectionVelocityDisplay= (TextView) calcView.findViewById(R.id.ejectionVelocityDisplay);
-        final TextView ejectionBurnDeltaVDisplay = (TextView) calcView.findViewById(R.id.ejectionBurnDeltaVDisplay);
+        warningMessageDisplay = (TextView) calcView.findViewById(R.id.warningMessageDisplay);
+        phaseAngleDisplay = (TextView) calcView.findViewById(R.id.phaseAngleDisplay);
+        ejectionAngleDisplay = (TextView) calcView.findViewById(R.id.ejectionAngleDisplay);
+        ejectionVelocityDisplay= (TextView) calcView.findViewById(R.id.ejectionVelocityDisplay);
+        ejectionBurnDeltaVDisplay = (TextView) calcView.findViewById(R.id.ejectionBurnDeltaVDisplay);
 
         // Set array adapters to populate spinners with choices
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, planets);
@@ -63,110 +72,118 @@ public class CalculatorFragment extends Fragment {
         origin.setAdapter(adapter);
         destination.setAdapter(adapter);
 
-        // Set onClick behaviors for layout buttons
-        calculateButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                boolean flag = false;
-                String warnings = "";
-                int parkingOrbit = -1;
-
-                int origIndex = origin.getSelectedItemPosition();
-                int destIndex = destination.getSelectedItemPosition();
-
-                if (origIndex == destIndex) {
-                    warnings += getString(R.string.planet_selection_warning);
-                    flag = true;
-                }
-
-                try {
-                    parkingOrbit = Integer.parseInt(parkingOrbitEntry.getText().toString());
-                }
-                catch (NumberFormatException e) {
-                    warnings += getString(R.string.parking_orbit_input_warning);
-                    flag = true;
-                }
-
-                warningMessageDisplay.setText(warnings);
-
-                if (flag) {
-                    return;
-                }
-
-                Body orig = bodies[origIndex];
-                Body dest = bodies[destIndex];
-                Body cent = bodies[7];
-
-                // Calculate the phase angle between the two planets at the start of the maneuver
-                double tTransfer = Math.PI * Math.sqrt( Math.pow(orig.sma + dest.sma, 3) / (8 * cent.mu) );
-                double angTravel = Math.sqrt(cent.mu/dest.sma) * tTransfer/dest.sma * 180/Math.PI;
-                double phase = (180 - angTravel) % 360;
-
-                // Calculate the ejection velocity
-                double parkR = orig.radius + parkingOrbit; // Radius of parking orbit from center of origin
-                // Distance from center of orbital system on point of exit from origin's sphere of influence
-                float exitR = orig.sma + orig.soi;
-                // Sphere of influence exit velocity
-                double exitV = Math.sqrt(cent.mu/exitR) * (Math.sqrt(2*dest.sma / (exitR+dest.sma)) - 1);
-                double ejectVNum = parkR * (orig.soi*exitV*exitV - 2*orig.mu) + 2*orig.soi*orig.mu;
-                double ejectVDen = parkR * orig.soi;
-                double ejectV = Math.sqrt(ejectVNum/ejectVDen);
-                //String ejectVText = "" + ejectV * 1000;
-                //ejectionVelocityDisplay.setText(ejectVText);
-
-                // Calculate the deltaV required for the exit burn
-                double deltaV = (ejectV - Math.sqrt(orig.mu/parkR));
-
-                // Calculate the angle for the exit burn
-                double eta = ejectV * ejectV / 2 - orig.mu / parkR;
-                double h = parkR * ejectV;
-                double e = Math.sqrt(1 + (2*eta*h*h)/(orig.mu*orig.mu));
-                double ejectDeg;
-                if (e < 1){
-                    double a = -orig.mu/(2 * eta);
-                    double l = a * (1 - e*e);
-                    double nu = Math.acos((l-orig.soi) / (e*orig.soi));
-                    double phi = Math.atan2( (e * Math.sin(nu)), (1 + e*Math.cos(nu)));
-                    ejectDeg = (90 - (phi * 180/Math.PI) + (nu * 180/Math.PI)) % 360;
-                }
-                else {
-                    double ejectRad = Math.acos(1/e);
-                    ejectDeg = (180 - ejectRad * 180/Math.PI) % 360;
-                }
-
-                phase = new BigDecimal(phase).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                String phaseText = " " + phase;
-                phaseAngleDisplay.setText(phaseText);
-
-                ejectV *= 1000; //scale up to account for displaying v in m/s instead of km/s
-                ejectV = new BigDecimal(ejectV).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                String ejectVText = " " + ejectV;
-                ejectionVelocityDisplay.setText(ejectVText);
-
-                deltaV *= 1000; //scale up to account for displaying v in m/s instead of km/s
-                deltaV = new BigDecimal(deltaV).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                String deltaVText = " " + deltaV;
-                ejectionBurnDeltaVDisplay.setText(deltaVText);
-
-                ejectDeg = new BigDecimal(ejectDeg).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                String ejectDegText = " " + ejectDeg;
-                ejectionAngleDisplay.setText(ejectDegText);
-
-                mCallback.onCalculation(orig.name, dest.name, (float) phase, (float) ejectDeg);
-            }
-        });
-
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                phaseAngleDisplay.setText("");
-                ejectionAngleDisplay.setText("");
-                ejectionVelocityDisplay.setText("");
-                ejectionBurnDeltaVDisplay.setText("");
-                parkingOrbitEntry.setText("");
-                warningMessageDisplay.setText("");
-            }
-        });
+        calculateButton.setOnClickListener(this);
+        resetButton.setOnClickListener(this);
 
         return calcView;
+    }
+
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.calculateButton){
+            boolean flag = false;
+            String warnings = "";
+            int parkingOrbit = -1;
+
+            // Get user inputs for the origin and destination
+            int origIndex = origin.getSelectedItemPosition();
+            int destIndex = destination.getSelectedItemPosition();
+
+            if (origIndex == destIndex) {
+                warnings += getString(R.string.planet_selection_warning);
+                flag = true;
+            }
+
+            // Get user input for the parking orbit radius
+            try {
+                parkingOrbit = Integer.parseInt(parkingOrbitEntry.getText().toString());
+            }
+            catch (NumberFormatException e) {
+                warnings += getString(R.string.parking_orbit_input_warning);
+                flag = true;
+            }
+
+            warningMessageDisplay.setText(warnings);
+
+            // If planet inputs or parking orbit inputs aren't valid, don't perform calculations
+            if (flag) {
+                return;
+            }
+
+            performCalculations(origIndex, destIndex, parkingOrbit);
+        }
+        else if (id == R.id.resetButton) {
+            phaseAngleDisplay.setText("");
+            ejectionAngleDisplay.setText("");
+            ejectionVelocityDisplay.setText("");
+            ejectionBurnDeltaVDisplay.setText("");
+            parkingOrbitEntry.setText("");
+            warningMessageDisplay.setText("");
+        }
+    }
+
+    private void performCalculations(int origIndex, int destIndex, int parkingOrbit) {
+        Body orig = bodies[origIndex];
+        Body dest = bodies[destIndex];
+        Body cent = bodies[7];
+
+        // Calculate the phase angle between the two planets at the start of the maneuver
+        double tTransfer = Math.PI * Math.sqrt( Math.pow(orig.sma + dest.sma, 3) / (8 * cent.mu) );
+        double angTravel = Math.sqrt(cent.mu/dest.sma) * tTransfer/dest.sma * 180/Math.PI;
+        double phase = (180 - angTravel) % 360;
+
+        // Calculate the ejection velocity
+        double parkR = orig.radius + parkingOrbit; // Radius of parking orbit from center of origin
+        // Distance from center of orbital system on point of exit from origin's sphere of influence
+        float exitR = orig.sma + orig.soi;
+        // Sphere of influence exit velocity
+        double exitV = Math.sqrt(cent.mu/exitR) * (Math.sqrt(2*dest.sma / (exitR+dest.sma)) - 1);
+        double ejectVNum = parkR * (orig.soi*exitV*exitV - 2*orig.mu) + 2*orig.soi*orig.mu;
+        double ejectVDen = parkR * orig.soi;
+        double ejectV = Math.sqrt(ejectVNum/ejectVDen);
+        //String ejectVText = "" + ejectV * 1000;
+        //ejectionVelocityDisplay.setText(ejectVText);
+
+        // Calculate the deltaV required for the exit burn
+        double deltaV = (ejectV - Math.sqrt(orig.mu/parkR));
+
+        // Calculate the angle for the exit burn
+        double eta = ejectV * ejectV / 2 - orig.mu / parkR;
+        double h = parkR * ejectV;
+        double e = Math.sqrt(1 + (2*eta*h*h)/(orig.mu*orig.mu));
+        double ejectDeg;
+        if (e < 1){
+            double a = -orig.mu/(2 * eta);
+            double l = a * (1 - e*e);
+            double nu = Math.acos((l-orig.soi) / (e*orig.soi));
+            double phi = Math.atan2( (e * Math.sin(nu)), (1 + e*Math.cos(nu)));
+            ejectDeg = (90 - (phi * 180/Math.PI) + (nu * 180/Math.PI)) % 360;
+        }
+        else {
+            double ejectRad = Math.acos(1/e);
+            ejectDeg = (180 - ejectRad * 180/Math.PI) % 360;
+        }
+
+        phase = new BigDecimal(phase).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        String phaseText = " " + phase;
+        phaseAngleDisplay.setText(phaseText);
+
+        ejectV *= 1000; //scale up to account for displaying v in m/s instead of km/s
+        ejectV = new BigDecimal(ejectV).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        String ejectVText = " " + ejectV;
+        ejectionVelocityDisplay.setText(ejectVText);
+
+        deltaV *= 1000; //scale up to account for displaying v in m/s instead of km/s
+        deltaV = new BigDecimal(deltaV).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        String deltaVText = " " + deltaV;
+        ejectionBurnDeltaVDisplay.setText(deltaVText);
+
+        ejectDeg = new BigDecimal(ejectDeg).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        String ejectDegText = " " + ejectDeg;
+        ejectionAngleDisplay.setText(ejectDegText);
+
+        mCallback.onCalculation(orig.name, dest.name, (float) phase, (float) ejectDeg);
     }
 
     @Override
