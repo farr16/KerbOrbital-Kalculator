@@ -23,6 +23,9 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
     public void onCalculation(String orig, String dest, float phase, float eject) {
         adapter.setOrigin(orig);
         adapter.setDestination(dest);
+        adapter.setInner(false);
+        adapter.setOriginColor(0);
+        adapter.setDestinationColor(0);
         adapter.setPhaseAngle(phase);
         adapter.setEjectionAngle(eject);
 

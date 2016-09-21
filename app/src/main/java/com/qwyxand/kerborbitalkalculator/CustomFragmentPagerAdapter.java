@@ -15,16 +15,22 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private String origin;
     private String destination;
+    private boolean inner;
+    private int originColor;
+    private int destinationColor;
     private float phaseAngle;
     private float ejectionAngle;
 
     // constructor
-    public CustomFragmentPagerAdapter(FragmentManager fm){
+    CustomFragmentPagerAdapter(FragmentManager fm){
         super(fm);
 
         // Default values for initial view setup
         origin = "";
         destination = "";
+        inner = false;
+        originColor = 0;
+        destinationColor = 0;
         phaseAngle = Float.NEGATIVE_INFINITY;
         ejectionAngle = Float.NEGATIVE_INFINITY;
     }
@@ -58,10 +64,10 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         if (object instanceof CalculatorFragment)
             ;
         else if (object instanceof PhaseAngleDisplayFragment) {
-            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, true, 0, 0, phaseAngle);
+            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, inner, originColor, destinationColor, phaseAngle);
         }
         else if (object instanceof EjectionAngleDisplayFragment) {
-            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, 0 , ejectionAngle);
+            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, originColor , ejectionAngle);
         }
         return super.getItemPosition(object);
     }
@@ -74,12 +80,18 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* Setter methods for the viewpager data set variables
     * */
-    public void setOrigin (String orig) {origin = orig;}
+    void setOrigin (String orig) {origin = orig;}
 
-    public void setDestination (String dest) {destination = dest;}
+    void setDestination (String dest) {destination = dest;}
 
-    public void setPhaseAngle (float phase) {phaseAngle = phase;}
+    void setInner (boolean in) {inner = in;}
 
-    public void setEjectionAngle (float eject) {ejectionAngle = eject;}
+    void setOriginColor (int color) {originColor = color;}
+
+    void setDestinationColor (int color) {destinationColor = color;}
+
+    void setPhaseAngle (float phase) {phaseAngle = phase;}
+
+    void setEjectionAngle (float eject) {ejectionAngle = eject;}
 
 }
