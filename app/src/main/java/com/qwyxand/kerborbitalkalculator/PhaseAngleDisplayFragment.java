@@ -19,6 +19,9 @@ public class PhaseAngleDisplayFragment extends Fragment {
 
     private String origin = "";
     private String destination = "";
+    private boolean innerOrbit = false;
+    private int originColor = 0;
+    private int destinationColor = 0;
     private float phaseAngle = Float.NEGATIVE_INFINITY;
 
     // For now, a TextView is used to display the calculated phase angle
@@ -38,7 +41,8 @@ public class PhaseAngleDisplayFragment extends Fragment {
 
         phaseDisplay = (TextView) view.findViewById(R.id.phaseAngleDisplayFragmentLabel);
         String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
-                        + phaseAngle;
+                        + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + originColor
+                        + "\nDestination Color: " + destinationColor;
 
         phaseDisplay.setText(content);
 
@@ -60,10 +64,13 @@ public class PhaseAngleDisplayFragment extends Fragment {
         origin = orig;
         phaseAngle = phase;
         destination = dest;
+        innerOrbit = inner;
+        originColor = origColor;
+        destinationColor = destColor;
 
         String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
-                        + phaseAngle + "\nInner: " + inner + "\nOrigin Color: " + Integer.toHexString(origColor)
-                        + "\nDestination Color: " + Integer.toHexString(destColor);
+                        + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(originColor)
+                        + "\nDestination Color: " + Integer.toHexString(destinationColor);
         phaseDisplay.setText(content);
     }
 }

@@ -19,6 +19,7 @@ public class EjectionAngleDisplayFragment extends Fragment {
 
     private String origin = "";
     private float ejectionAngle = Float.NEGATIVE_INFINITY;
+    private int originColor = 0;
 
     // For now, a TextView is used to display the calculated phase angle
     // Later, this will be drawn graphically
@@ -35,7 +36,8 @@ public class EjectionAngleDisplayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ejection_angle_display, container, false);
 
         ejectionDisplay = (TextView) view.findViewById(R.id.ejectionAngleDisplayFragmentLabel);
-        String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle;
+        String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle
+                        + "\nOrigin Color: " + originColor;
 
         ejectionDisplay.setText(content);
 
@@ -54,9 +56,10 @@ public class EjectionAngleDisplayFragment extends Fragment {
     public void updateEjectionDisplay(String orig, int color, float eject) {
         origin = orig;
         ejectionAngle = eject;
+        originColor = color;
 
         String content = "Origin: " + origin + "\nEjection Angle: " + ejectionAngle
-                        + "\nColor:" + Integer.toHexString(color);
+                        + "\nColor:" + Integer.toHexString(originColor);
         ejectionDisplay.setText(content);
 
     }

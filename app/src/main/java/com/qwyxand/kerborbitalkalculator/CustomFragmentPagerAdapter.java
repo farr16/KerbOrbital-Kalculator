@@ -57,7 +57,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     /** getItemPosition
      *
      * Returns the position of a given Fragment object. Overwritten to allow for updating of views
-     * by the adapter when notifyDatasetChanged() is called, by calling the given object's public
+     * by the adapter when notifyDataSetChanged() is called, by calling the given object's public
      * update method.
      */
     public int getItemPosition(Object object) {

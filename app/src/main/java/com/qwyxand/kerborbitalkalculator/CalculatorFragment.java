@@ -238,6 +238,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
  * sma stores the body's semi-major axis
  * radius stores the body's radius
  * soi stores the body's sphere of influence
+ * color stores the color the body will be drawn in on the display views
  */
 class Body {
     final String name;
