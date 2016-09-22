@@ -20,12 +20,12 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
      * @param phase The phase angle calculated by the calculator.
      * @param eject The ejection angle calculated by the calculator.
      */
-    public void onCalculation(String orig, String dest, float phase, float eject) {
+    public void onCalculation(String orig, String dest, float phase, float eject, boolean inner, int origColor, int destColor) {
         adapter.setOrigin(orig);
         adapter.setDestination(dest);
-        adapter.setInner(false);
-        adapter.setOriginColor(0);
-        adapter.setDestinationColor(0);
+        adapter.setInner(inner);
+        adapter.setOriginColor(origColor);
+        adapter.setDestinationColor(destColor);
         adapter.setPhaseAngle(phase);
         adapter.setEjectionAngle(eject);
 

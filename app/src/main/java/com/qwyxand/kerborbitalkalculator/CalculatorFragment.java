@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     OnCalculationListener mCallback;
 
     public interface OnCalculationListener {
-        void onCalculation(String orig, String dest, float phase, float eject );
+        void onCalculation(String orig, String dest, float phase, float eject, boolean inner, int origColor, int destColor);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -142,8 +143,6 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         double ejectVNum = parkR * (orig.soi*exitV*exitV - 2*orig.mu) + 2*orig.soi*orig.mu;
         double ejectVDen = parkR * orig.soi;
         double ejectV = Math.sqrt(ejectVNum/ejectVDen);
-        //String ejectVText = "" + ejectV * 1000;
-        //ejectionVelocityDisplay.setText(ejectVText);
 
         // Calculate the deltaV required for the exit burn
         double deltaV = (ejectV - Math.sqrt(orig.mu/parkR));
@@ -183,7 +182,9 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         String ejectDegText = " " + ejectDeg;
         ejectionAngleDisplay.setText(ejectDegText);
 
-        mCallback.onCalculation(orig.name, dest.name, (float) phase, (float) ejectDeg);
+        boolean inner = origIndex < destIndex;
+
+        mCallback.onCalculation(orig.name, dest.name, (float) phase, (float) ejectDeg, inner, orig.color, dest.color);
     }
 
     @Override
@@ -212,17 +213,17 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
      * used in the orbital transfer calculations.
      * @return bodies
      */
-    private static Body[] initBodies() {
+    private Body[] initBodies() {
         Body[] bodies = new Body[8];
-
-        bodies[0] = new Body("Moho", 168.60938f, 5263138.304f, 250, 9646.630f);
-        bodies[1] = new Body("Eve", 8171.7302f, 9832684.544f, 700, 85109.365f);
-        bodies[2] = new Body("Kerbin", 3531.6f, 13599840.256f, 600, 84159.286f);
-        bodies[3] = new Body("Duna", 301.36321f, 20726155.264f, 320, 47921.949f);
-        bodies[4] = new Body("Dres", 21.484489f, 40839358.203f, 138, 32832.840f);
-        bodies[5] = new Body("Jool", 282528.0f, 68773560.320f, 6000, 2455985.2f);
-        bodies[6] = new Body("Eeloo", 74.410815f, 90118820.000f, 210, 119082.94f);
-        bodies[7] = new Body("Kerbol", 1172332800f, 0f, 261600, Float.POSITIVE_INFINITY);
+        Context context = getContext();
+        bodies[0] = new Body("Moho", 168.60938f, 5263138.304f, 250, 9646.630f, ContextCompat.getColor(context, R.color.colorMohoDisplay));
+        bodies[1] = new Body("Eve", 8171.7302f, 9832684.544f, 700, 85109.365f, ContextCompat.getColor(context, R.color.colorEveDisplay));
+        bodies[2] = new Body("Kerbin", 3531.6f, 13599840.256f, 600, 84159.286f, ContextCompat.getColor(context, R.color.colorKerbinDisplay));
+        bodies[3] = new Body("Duna", 301.36321f, 20726155.264f, 320, 47921.949f, ContextCompat.getColor(context, R.color.colorDunaDisplay));
+        bodies[4] = new Body("Dres", 21.484489f, 40839358.203f, 138, 32832.840f, ContextCompat.getColor(context, R.color.colorDresDisplay));
+        bodies[5] = new Body("Jool", 282528.0f, 68773560.320f, 6000, 2455985.2f, ContextCompat.getColor(context, R.color.colorJoolDisplay));
+        bodies[6] = new Body("Eeloo", 74.410815f, 90118820.000f, 210, 119082.94f, ContextCompat.getColor(context, R.color.colorEelooDisplay));
+        bodies[7] = new Body("Kerbol", 1172332800f, 0f, 261600, Float.POSITIVE_INFINITY, ContextCompat.getColor(context, R.color.colorKerbolDisplay));
 
         return bodies;
     }
@@ -244,12 +245,14 @@ class Body {
     final float sma;
     final int radius;
     final float soi;
+    final int color;
 
-    Body(String _name, float _mu, float _sma, int _radius, float _soi) {
+    Body(String _name, float _mu, float _sma, int _radius, float _soi, int _color) {
         name = _name;
         mu = _mu;
         sma = _sma;
         radius = _radius;
         soi = _soi;
+        color = _color;
     }
 }
