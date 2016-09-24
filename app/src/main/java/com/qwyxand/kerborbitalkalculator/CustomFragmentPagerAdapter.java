@@ -13,11 +13,8 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGE_COUNT = 3;
 
-    private String origin;
-    private String destination;
-    private boolean inner;
-    private int originColor;
-    private int destinationColor;
+    private Body origin;
+    private Body destination;
     private float phaseAngle;
     private float ejectionAngle;
 
@@ -26,11 +23,8 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         super(fm);
 
         // Default values for initial view setup
-        origin = "";
-        destination = "";
-        inner = false;
-        originColor = 0;
-        destinationColor = 0;
+        origin = null;
+        destination = null;
         phaseAngle = Float.NEGATIVE_INFINITY;
         ejectionAngle = Float.NEGATIVE_INFINITY;
     }
@@ -64,10 +58,10 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         if (object instanceof CalculatorFragment)
             ;
         else if (object instanceof PhaseAngleDisplayFragment) {
-            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, inner, originColor, destinationColor, phaseAngle);
+            ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, phaseAngle);
         }
         else if (object instanceof EjectionAngleDisplayFragment) {
-            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, originColor , ejectionAngle);
+            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, ejectionAngle);
         }
         return super.getItemPosition(object);
     }
@@ -80,15 +74,9 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     /* Setter methods for the viewpager data set variables
     * */
-    void setOrigin (String orig) {origin = orig;}
+    void setOrigin (Body orig) {origin = orig;}
 
-    void setDestination (String dest) {destination = dest;}
-
-    void setInner (boolean in) {inner = in;}
-
-    void setOriginColor (int color) {originColor = color;}
-
-    void setDestinationColor (int color) {destinationColor = color;}
+    void setDestination (Body dest) {destination = dest;}
 
     void setPhaseAngle (float phase) {phaseAngle = phase;}
 

@@ -19,15 +19,10 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
      * @param dest The destination planet selected in the CalculatorFragment view.
      * @param phase The phase angle calculated by the calculator.
      * @param eject The ejection angle calculated by the calculator.
-     * @param inner Boolean which is true if the origin planet's orbit is inside the destination
-     *              planet's orbit
      */
-    public void onCalculation(String orig, String dest, float phase, float eject, boolean inner, int origColor, int destColor) {
+    public void onCalculation(Body orig, Body dest, float phase, float eject) {
         adapter.setOrigin(orig);
         adapter.setDestination(dest);
-        adapter.setInner(inner);
-        adapter.setOriginColor(origColor);
-        adapter.setDestinationColor(destColor);
         adapter.setPhaseAngle(phase);
         adapter.setEjectionAngle(eject);
 

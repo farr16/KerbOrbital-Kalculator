@@ -17,11 +17,8 @@ import android.widget.TextView;
  */
 public class PhaseAngleDisplayFragment extends Fragment {
 
-    private String origin = "";
-    private String destination = "";
-    private boolean innerOrbit = false;
-    private int originColor = 0;
-    private int destinationColor = 0;
+    private Body origin;
+    private Body destination;
     private float phaseAngle = Float.NEGATIVE_INFINITY;
 
     // For now, a TextView is used to display the calculated phase angle
@@ -40,9 +37,17 @@ public class PhaseAngleDisplayFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_phase_angle_display, container, false);
 
         phaseDisplay = (TextView) view.findViewById(R.id.phaseAngleDisplayFragmentLabel);
-        String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
-                        + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + originColor
-                        + "\nDestination Color: " + destinationColor;
+
+        String content;
+
+        if (origin!=null && destination!=null) {
+            boolean innerOrbit = origin.sma < destination.sma;
+            content = "Origin: " + origin.name + "\nDestination: " + destination.name + "\nPhase Angle: "
+                    + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(origin.color)
+                    + "\nDestination Color: " + Integer.toHexString(destination.color);
+        }
+        else
+            content = getString(R.string.phase_angle_display_fragment_label);
 
         phaseDisplay.setText(content);
 
@@ -59,18 +64,20 @@ public class PhaseAngleDisplayFragment extends Fragment {
      * @param dest The destination planet selected in the CalculatorFragment view
      * @param phase The phase angle calculated by the calculator
      */
-    public void updatePhaseDisplay(String orig, String dest, boolean inner, int origColor, int destColor, float phase) {
+    public void updatePhaseDisplay(Body orig, Body dest, float phase) {
 
         origin = orig;
+        destination = dest;
         phaseAngle = phase;
         destination = dest;
-        innerOrbit = inner;
-        originColor = origColor;
-        destinationColor = destColor;
 
-        String content = "Origin: " + origin + "\nDestination: " + destination + "\nPhase Angle: "
-                        + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(originColor)
-                        + "\nDestination Color: " + Integer.toHexString(destinationColor);
-        phaseDisplay.setText(content);
+        if (origin!=null && destination!=null) {
+            boolean innerOrbit = origin.sma < destination.sma;
+            String content = "Origin: " + origin.name + "\nDestination: " + destination.name + "\nPhase Angle: "
+                            + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(origin.color)
+                            + "\nDestination Color: " + Integer.toHexString(destination.color);
+
+            phaseDisplay.setText(content);
+        }
     }
 }

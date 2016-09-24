@@ -40,7 +40,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     OnCalculationListener mCallback;
 
     public interface OnCalculationListener {
-        void onCalculation(String orig, String dest, float phase, float eject, boolean inner, int origColor, int destColor);
+        void onCalculation(Body orig, Body dest, float phase, float eject);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -182,9 +182,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         String ejectDegText = " " + ejectDeg;
         ejectionAngleDisplay.setText(ejectDegText);
 
-        boolean inner = origIndex < destIndex;
-
-        mCallback.onCalculation(orig.name, dest.name, (float) phase, (float) ejectDeg, inner, orig.color, dest.color);
+        mCallback.onCalculation(orig, dest, (float) phase, (float) ejectDeg);
     }
 
     @Override
