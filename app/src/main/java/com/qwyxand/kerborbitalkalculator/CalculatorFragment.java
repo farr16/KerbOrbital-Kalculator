@@ -165,21 +165,21 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
         }
 
         phase = new BigDecimal(phase).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        String phaseText = " " + phase;
+        String phaseText = " " + phase + "°";
         phaseAngleDisplay.setText(phaseText);
 
         ejectV *= 1000; //scale up to account for displaying v in m/s instead of km/s
         ejectV = new BigDecimal(ejectV).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        String ejectVText = " " + ejectV;
+        String ejectVText = " " + ejectV + " m/s";
         ejectionVelocityDisplay.setText(ejectVText);
 
         deltaV *= 1000; //scale up to account for displaying v in m/s instead of km/s
         deltaV = new BigDecimal(deltaV).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        String deltaVText = " " + deltaV;
+        String deltaVText = " " + deltaV + " m/s";
         ejectionBurnDeltaVDisplay.setText(deltaVText);
 
         ejectDeg = new BigDecimal(ejectDeg).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        String ejectDegText = " " + ejectDeg;
+        String ejectDegText = " " + ejectDeg + "°";
         ejectionAngleDisplay.setText(ejectDegText);
 
         mCallback.onCalculation(orig, dest, (float) phase, (float) ejectDeg);
