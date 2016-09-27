@@ -27,7 +27,9 @@ public class PhaseAngleDisplayCanvas extends View {
 
     private Path originOrbit;
     private Path destinationOrbit;
-    private Path kerbol;
+    private Path kerbolDraw;
+    private Path originDraw;
+    private Path destinationDraw;
 
     private Paint orbitPaint;
     private Paint kerbolPaint;
@@ -37,7 +39,9 @@ public class PhaseAngleDisplayCanvas extends View {
 
         originOrbit = new Path();
         destinationOrbit = new Path();
-        kerbol = new Path();
+        kerbolDraw = new Path();
+        originDraw = new Path();
+        destinationDraw = new Path();
 
         // Setup paint for drawing orbit circles
         orbitPaint = new Paint();
@@ -69,13 +73,15 @@ public class PhaseAngleDisplayCanvas extends View {
         if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY)
             return;
 
-        kerbol.reset();
+        kerbolDraw.reset();
         originOrbit.reset();
         destinationOrbit.reset();
+        originDraw.reset();
+        destinationDraw.reset();
 
         float bodyRadius = 10f;
 
-        kerbol.addCircle(x, y, bodyRadius, Path.Direction.CW);
+        kerbolDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
 
         float outerRad = minDim / 2 - bodyRadius;
         float minInnerRad = 4 * bodyRadius;
@@ -100,9 +106,25 @@ public class PhaseAngleDisplayCanvas extends View {
             originOrbit.addCircle(x, y, destRad, Path.Direction.CW);
         }
 
+        Paint originPaint = new Paint();
+        originPaint.setAntiAlias(true);
+        originPaint.setColor(origin.color);
+
+        Paint destinationPaint = new Paint();
+        destinationPaint.setAntiAlias(true);
+        destinationPaint.setColor(destination.color);
+
+        originDraw.addCircle(x+origRad, y, bodyRadius, Path.Direction.CW);
+
+        float destX = (float) (x + Math.cos(Math.toRadians(phaseAngle))*destRad);
+        float destY = (float) (y - Math.sin(Math.toRadians(phaseAngle))*destRad);
+        destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
+
         canvas.drawPath(originOrbit, orbitPaint);
         canvas.drawPath(destinationOrbit, orbitPaint);
-        canvas.drawPath(kerbol, kerbolPaint);
+        canvas.drawPath(kerbolDraw, kerbolPaint);
+        canvas.drawPath(originDraw, originPaint);
+        canvas.drawPath(destinationDraw, destinationPaint);
     }
 
     // Setter methods for private variables
