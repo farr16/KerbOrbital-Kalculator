@@ -16,4 +16,5 @@
     <color name="colorKerbolDisplay">#F0F032</color>
 
     <color name="colorOrbitCircles">#666666</color>
+    <color name="colorAngleLines">#ED2939</color>
 </resources>

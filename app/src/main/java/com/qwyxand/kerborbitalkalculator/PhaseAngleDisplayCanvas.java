@@ -29,11 +29,13 @@ public class PhaseAngleDisplayCanvas extends View {
     private Path kerbolDraw;
     private Path originDraw;
     private Path destinationDraw;
+    private Path angleDisplayLines;
 
     private Paint orbitPaint;
     private Paint kerbolPaint;
     private Paint originPaint;
     private Paint destinationPaint;
+    private Paint angleDisplayPaint;
 
     public PhaseAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -44,6 +46,7 @@ public class PhaseAngleDisplayCanvas extends View {
         kerbolDraw = new Path();
         originDraw = new Path();
         destinationDraw = new Path();
+        angleDisplayLines = new Path();
 
         // Setup paint for drawing orbit circles
         orbitPaint = new Paint();
@@ -51,6 +54,13 @@ public class PhaseAngleDisplayCanvas extends View {
         orbitPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles));
         orbitPaint.setStyle(Paint.Style.STROKE);
         orbitPaint.setStrokeWidth(2f);
+
+        // Setup paint for drawing angle lines
+        angleDisplayPaint = new Paint();
+        angleDisplayPaint.setAntiAlias(true);
+        angleDisplayPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
+        angleDisplayPaint.setStyle(Paint.Style.STROKE);
+        angleDisplayPaint.setStrokeWidth(2f);
 
         // Setup paint for drawing sun
         kerbolPaint = new Paint();
@@ -93,6 +103,7 @@ public class PhaseAngleDisplayCanvas extends View {
         destinationOrbit.reset();
         originDraw.reset();
         destinationDraw.reset();
+        angleDisplayLines.reset();
 
         // TODO: Replace with different sizes for different display densities/sizes
         float bodyRadius = 10f;
@@ -133,13 +144,23 @@ public class PhaseAngleDisplayCanvas extends View {
         // Place the origin planet along the vertical center of the screen on its orbit
         originDraw.addCircle(x+origRad, y, bodyRadius, Path.Direction.CW);
 
+        // Calculate sin and cos for phase angle, which will be used to place the destination planet
+        // And to draw the angle display
+        float phaseCos = (float) Math.cos(Math.toRadians(phaseAngle));
+        float phaseSin = (float) Math.cos(Math.toRadians(phaseAngle));
+
         // Place the destination planet on its orbit offset from the origin planet by the phase angle
-        float destX = (float) (x + Math.cos(Math.toRadians(phaseAngle))*destRad);
-        float destY = (float) (y - Math.sin(Math.toRadians(phaseAngle))*destRad);
+        float destX = (float) (x + phaseCos*destRad);
+        float destY = (float) (y - phaseSin*destRad);
         destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
-        
+
+        angleDisplayLines.moveTo(x + phaseCos*minDim/2, y - phaseSin*minDim/2);
+        angleDisplayLines.lineTo(x,y);
+        angleDisplayLines.lineTo(x + minDim/2, y);
+
         canvas.drawPath(originOrbit, orbitPaint);
         canvas.drawPath(destinationOrbit, orbitPaint);
+        canvas.drawPath(angleDisplayLines, angleDisplayPaint);
         canvas.drawPath(kerbolDraw, kerbolPaint);
         canvas.drawPath(originDraw, originPaint);
         canvas.drawPath(destinationDraw, destinationPaint);
