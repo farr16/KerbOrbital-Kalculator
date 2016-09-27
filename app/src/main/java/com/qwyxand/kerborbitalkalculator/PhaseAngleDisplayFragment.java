@@ -21,9 +21,7 @@ public class PhaseAngleDisplayFragment extends Fragment {
     private Body destination;
     private float phaseAngle = Float.NEGATIVE_INFINITY;
 
-    // For now, a TextView is used to display the calculated phase angle
-    // Later, this will be drawn graphically
-    private TextView phaseDisplay;
+    private PhaseAngleDisplayCanvas phaseAngleDisplayCanvas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,20 +34,7 @@ public class PhaseAngleDisplayFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_phase_angle_display, container, false);
 
-        phaseDisplay = (TextView) view.findViewById(R.id.phaseAngleDisplayFragmentLabel);
-
-        String content;
-
-        if (origin!=null && destination!=null) {
-            boolean innerOrbit = origin.sma < destination.sma;
-            content = "Origin: " + origin.name + "\nDestination: " + destination.name + "\nPhase Angle: "
-                    + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(origin.color)
-                    + "\nDestination Color: " + Integer.toHexString(destination.color);
-        }
-        else
-            content = getString(R.string.phase_angle_display_fragment_label);
-
-        phaseDisplay.setText(content);
+        phaseAngleDisplayCanvas = (PhaseAngleDisplayCanvas) view.findViewById(R.id.phaseAngleDisplayCanvas);
 
         return view;
     }
@@ -69,15 +54,14 @@ public class PhaseAngleDisplayFragment extends Fragment {
         origin = orig;
         destination = dest;
         phaseAngle = phase;
-        destination = dest;
 
         if (origin!=null && destination!=null) {
-            boolean innerOrbit = origin.sma < destination.sma;
-            String content = "Origin: " + origin.name + "\nDestination: " + destination.name + "\nPhase Angle: "
-                            + phaseAngle + "\nInner: " + innerOrbit + "\nOrigin Color: " + Integer.toHexString(origin.color)
-                            + "\nDestination Color: " + Integer.toHexString(destination.color);
 
-            phaseDisplay.setText(content);
+            phaseAngleDisplayCanvas.setOrigin(origin);
+            phaseAngleDisplayCanvas.setDestination(destination);
+            phaseAngleDisplayCanvas.setPhaseAngle(phaseAngle);
+
+            phaseAngleDisplayCanvas.invalidate();
         }
     }
 }

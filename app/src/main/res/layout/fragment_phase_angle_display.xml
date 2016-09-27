@@ -6,8 +6,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/phase_angle_display_fragment_label"
-        android:id="@+id/phaseAngleDisplayFragmentLabel"
-        android:layout_gravity="center" />
+        android:id="@+id/phaseAngleDisplayFragmentLabel" />
+
+    <com.qwyxand.kerborbitalkalculator.PhaseAngleDisplayCanvas
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/phaseAngleDisplayCanvas"
+        />
 </FrameLayout>

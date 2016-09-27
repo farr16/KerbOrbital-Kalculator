@@ -31,6 +31,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     /** getItem
+     *
      * Given a position index, returns the fragment corresponding to that index.
      */
     public Fragment getItem(int pos) {
@@ -68,6 +69,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     /** getCount
+     *
      * Returns the number of tabs in the application interface, currently fixed at three.
      */
     public int getCount() {return PAGE_COUNT;}

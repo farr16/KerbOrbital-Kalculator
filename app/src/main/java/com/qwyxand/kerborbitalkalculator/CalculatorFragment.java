@@ -37,10 +37,16 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     private TextView ejectionVelocityDisplay;
     private TextView ejectionBurnDeltaVDisplay;
 
-    OnCalculationListener mCallback;
+    OnCalculatorButtonPressedListener mCallback;
 
-    public interface OnCalculationListener {
+    /** OnCalculatorButtonPressedListener
+     *
+     * Interface which must be implemented by the Activity, which handles communication updating
+     * the other fragments.
+     */
+    public interface OnCalculatorButtonPressedListener {
         void onCalculation(Body orig, Body dest, float phase, float eject);
+        void onReset();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,9 +127,20 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
             ejectionBurnDeltaVDisplay.setText("");
             parkingOrbitEntry.setText("");
             warningMessageDisplay.setText("");
+            mCallback.onReset();
         }
     }
 
+    /** performCalculations
+     *
+     * Performs orbital maneuver calculations when the calculator button is pressed with valid
+     * input. Displays those results on the text views in the CalculatorFragment, then uses
+     * the callback method OnCalculation to push the results to the MainActivity.
+     *
+     * @param origIndex The index of the origin body in the bodies array
+     * @param destIndex The index of the destination body in the bodies array
+     * @param parkingOrbit The height of the parking orbit in km above the origin body's surface
+     */
     private void performCalculations(int origIndex, int destIndex, int parkingOrbit) {
         Body orig = bodies[origIndex];
         Body dest = bodies[destIndex];
@@ -188,7 +205,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
     @Override
     /** onAttach
      * Fragment lifecycle method called when the fragment is first associated with its activity
-     * Overriden to check that the activity the fragment is attached to implements its listener
+     * Overridden to check that the activity the fragment is attached to implements its listener
      */
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -199,7 +216,7 @@ public class CalculatorFragment extends Fragment implements View.OnClickListener
             activity = (Activity) context;
 
         try {
-            mCallback = (OnCalculationListener) activity;
+            mCallback = (OnCalculatorButtonPressedListener) activity;
         }
         catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + "must implement OnCalculationListener");

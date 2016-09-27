@@ -64,11 +64,16 @@ public class EjectionAngleDisplayFragment extends Fragment {
         origin = orig;
         ejectionAngle = eject;
 
+        String content;
         if (origin != null) {
-            String content = "Origin: " + origin.name + "\nEjection Angle: " + ejectionAngle
+            content = "Origin: " + origin.name + "\nEjection Angle: " + ejectionAngle
                             + "\nColor:" + Integer.toHexString(origin.color);
-            ejectionDisplay.setText(content);
         }
+        else {
+            content = getString(R.string.ejection_angle_display_fragment_label);
+        }
+
+        ejectionDisplay.setText(content);
 
     }
 }

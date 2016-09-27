@@ -4,13 +4,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
-public class MainActivity extends FragmentActivity implements CalculatorFragment.OnCalculationListener{
+public class MainActivity extends FragmentActivity implements CalculatorFragment.OnCalculatorButtonPressedListener{
 
     private CustomFragmentPagerAdapter adapter;
 
     /** onCalculation
      *
-     * Listener for fragment communication from the CalculatorFragment to the other fragments.
+     * Callback for fragment communication from the CalculatorFragment to the other fragments.
      * Called when the calculate button is pressed in the CalculatorFragment. Puts the info
      * passed by the fragment into the adapter and calls notifyDataSetChanged, resulting in the
      * PhaseAngleDisplayFragment and EjectionAngleDisplayFragment views being updated.
@@ -25,6 +25,22 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
         adapter.setDestination(dest);
         adapter.setPhaseAngle(phase);
         adapter.setEjectionAngle(eject);
+
+        adapter.notifyDataSetChanged();
+    }
+
+    /** onReset
+     *
+     * Callback for fragment communication from the CalculatorFragment to the other fragments.
+     * Called when the reset button is pressed in the CalculatorFragment. Puts default values
+     * into the the adapter and calls notifyDataSetChanged, resulting in the
+     * PhaseAngleDisplayFragment and EjectionAngleDisplayFragment views being refreshed.
+     */
+    public void onReset() {
+        adapter.setOrigin(null);
+        adapter.setDestination(null);
+        adapter.setPhaseAngle(Float.NEGATIVE_INFINITY);
+        adapter.setEjectionAngle(Float.NEGATIVE_INFINITY);
 
         adapter.notifyDataSetChanged();
     }
