@@ -2,6 +2,7 @@ package com.qwyxand.kerborbitalkalculator;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.v4.content.ContextCompat;
@@ -36,6 +37,7 @@ public class PhaseAngleDisplayCanvas extends View {
     private Paint originPaint;
     private Paint destinationPaint;
     private Paint angleDisplayPaint;
+    private Paint textPaint;
 
     public PhaseAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -73,6 +75,9 @@ public class PhaseAngleDisplayCanvas extends View {
         destinationPaint = new Paint();
         destinationPaint.setAntiAlias(true);
 
+        textPaint = new Paint();
+        textPaint.setColor(Color.BLACK);
+
     }
 
     @Override
@@ -93,10 +98,6 @@ public class PhaseAngleDisplayCanvas extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // If one of the values required to draw the view isn't set up, return without drawing
-        if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY)
-            return;
-
         // Reset paths so any previous contents aren't drawn again
         kerbolDraw.reset();
         originOrbit.reset();
@@ -104,6 +105,11 @@ public class PhaseAngleDisplayCanvas extends View {
         originDraw.reset();
         destinationDraw.reset();
         angleDisplayLines.reset();
+
+        // If one of the values required to draw the view isn't set up, return without drawing
+        if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY) {
+            return;
+        }
 
         // TODO: Replace with different sizes for different display densities/sizes
         float bodyRadius = 10f;
@@ -164,6 +170,10 @@ public class PhaseAngleDisplayCanvas extends View {
         canvas.drawPath(kerbolDraw, kerbolPaint);
         canvas.drawPath(originDraw, originPaint);
         canvas.drawPath(destinationDraw, destinationPaint);
+        float offset = (origRad == outerRad) ? -bodyRadius*2 : 0;
+        canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, textPaint);
+        canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, textPaint);
+        canvas.drawText(destination.name, destX, destY+bodyRadius*2, textPaint);
     }
 
     // Setter methods for private variables
