@@ -150,8 +150,8 @@ public class PhaseAngleDisplayCanvas extends View {
         float phaseSin = (float) Math.cos(Math.toRadians(phaseAngle));
 
         // Place the destination planet on its orbit offset from the origin planet by the phase angle
-        float destX = (float) (x + phaseCos*destRad);
-        float destY = (float) (y - phaseSin*destRad);
+        float destX = (x + phaseCos*destRad);
+        float destY = (y - phaseSin*destRad);
         destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
 
         angleDisplayLines.moveTo(x + phaseCos*minDim/2, y - phaseSin*minDim/2);
