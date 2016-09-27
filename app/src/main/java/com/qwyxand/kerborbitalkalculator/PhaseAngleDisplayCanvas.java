@@ -111,7 +111,7 @@ public class PhaseAngleDisplayCanvas extends View {
         // Draw the central body in the center of the screen
         kerbolDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
 
-        float outerRad = minDim / 2 - bodyRadius;
+        float outerRad = minDim/2 - bodyRadius*2;
         float minInnerRad = 4 * bodyRadius;
 
         float origRad;
@@ -147,7 +147,7 @@ public class PhaseAngleDisplayCanvas extends View {
         // Calculate sin and cos for phase angle, which will be used to place the destination planet
         // And to draw the angle display
         float phaseCos = (float) Math.cos(Math.toRadians(phaseAngle));
-        float phaseSin = (float) Math.cos(Math.toRadians(phaseAngle));
+        float phaseSin = (float) Math.sin(Math.toRadians(phaseAngle));
 
         // Place the destination planet on its orbit offset from the origin planet by the phase angle
         float destX = (x + phaseCos*destRad);
