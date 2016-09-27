@@ -14,7 +14,6 @@ import android.view.View;
  * Handles drawing the graphical representation of the phase angle between the origin and destination
  * bodies.
  */
-
 public class PhaseAngleDisplayCanvas extends View {
 
     private Body origin;
@@ -33,10 +32,13 @@ public class PhaseAngleDisplayCanvas extends View {
 
     private Paint orbitPaint;
     private Paint kerbolPaint;
+    private Paint originPaint;
+    private Paint destinationPaint;
 
     public PhaseAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
 
+        // Setup path variables which will store draw shapes
         originOrbit = new Path();
         destinationOrbit = new Path();
         kerbolDraw = new Path();
@@ -55,9 +57,20 @@ public class PhaseAngleDisplayCanvas extends View {
         kerbolPaint.setAntiAlias(true);
         kerbolPaint.setColor(ContextCompat.getColor(c, R.color.colorKerbolDisplay));
 
+        // Setup paint for drawing origin and destination (without color)
+        originPaint = new Paint();
+        originPaint.setAntiAlias(true);
+        destinationPaint = new Paint();
+        destinationPaint.setAntiAlias(true);
+
     }
 
     @Override
+    /** onSizeChanged
+     * Overridden to store coordinates of the center of the canvas whenever the canvas is resized,
+     * and to calculate which dimension is smaller so drawn circles don't exceed the size of the
+     * canvas.
+     */
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
@@ -70,17 +83,21 @@ public class PhaseAngleDisplayCanvas extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        // If one of the values required to draw the view isn't set up, return without drawing
         if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY)
             return;
 
+        // Reset paths so any previous contents aren't drawn again
         kerbolDraw.reset();
         originOrbit.reset();
         destinationOrbit.reset();
         originDraw.reset();
         destinationDraw.reset();
 
+        // TODO: Replace with different sizes for different display densities/sizes
         float bodyRadius = 10f;
 
+        // Draw the central body in the center of the screen
         kerbolDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
 
         float outerRad = minDim / 2 - bodyRadius;
@@ -89,6 +106,7 @@ public class PhaseAngleDisplayCanvas extends View {
         float origRad;
         float destRad;
 
+        // Setup the paths for drawing each orbit circle
         if (origin.sma < destination.sma) {
             destRad = outerRad;
             destinationOrbit.addCircle(x, y, destRad, Path.Direction.CW);
@@ -106,20 +124,20 @@ public class PhaseAngleDisplayCanvas extends View {
             originOrbit.addCircle(x, y, destRad, Path.Direction.CW);
         }
 
-        Paint originPaint = new Paint();
         originPaint.setAntiAlias(true);
         originPaint.setColor(origin.color);
 
-        Paint destinationPaint = new Paint();
         destinationPaint.setAntiAlias(true);
         destinationPaint.setColor(destination.color);
 
+        // Place the origin planet along the vertical center of the screen on its orbit
         originDraw.addCircle(x+origRad, y, bodyRadius, Path.Direction.CW);
 
+        // Place the destination planet on its orbit offset from the origin planet by the phase angle
         float destX = (float) (x + Math.cos(Math.toRadians(phaseAngle))*destRad);
         float destY = (float) (y - Math.sin(Math.toRadians(phaseAngle))*destRad);
         destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
-
+        
         canvas.drawPath(originOrbit, orbitPaint);
         canvas.drawPath(destinationOrbit, orbitPaint);
         canvas.drawPath(kerbolDraw, kerbolPaint);
