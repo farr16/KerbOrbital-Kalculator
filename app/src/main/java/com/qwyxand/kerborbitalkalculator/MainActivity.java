@@ -25,6 +25,7 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
         adapter.setDestination(dest);
         adapter.setPhaseAngle(phase);
         adapter.setEjectionAngle(eject);
+        adapter.setInner(orig.sma < dest.sma);
 
         adapter.notifyDataSetChanged();
     }
@@ -41,6 +42,7 @@ public class MainActivity extends FragmentActivity implements CalculatorFragment
         adapter.setDestination(null);
         adapter.setPhaseAngle(Float.NEGATIVE_INFINITY);
         adapter.setEjectionAngle(Float.NEGATIVE_INFINITY);
+        adapter.setInner(false);
 
         adapter.notifyDataSetChanged();
     }

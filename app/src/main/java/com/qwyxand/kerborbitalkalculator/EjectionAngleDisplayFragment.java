@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * Created by Matthew on 9/4/2016.
@@ -19,10 +18,10 @@ public class EjectionAngleDisplayFragment extends Fragment {
 
     private Body origin = null;
     private float ejectionAngle = Float.NEGATIVE_INFINITY;
+    private boolean inner = false;
 
-    // For now, a TextView is used to display the calculated phase angle
-    // Later, this will be drawn graphically
-    private TextView ejectionDisplay;
+
+    private EjectionAngleDisplayCanvas ejectionAngleDisplayCanvas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,19 +33,7 @@ public class EjectionAngleDisplayFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_ejection_angle_display, container, false);
 
-        ejectionDisplay = (TextView) view.findViewById(R.id.ejectionAngleDisplayFragmentLabel);
-
-        String content;
-
-        if (origin != null) {
-            content = "Origin: " + origin.name + "\nEjection Angle: " + ejectionAngle
-                     + "\nOrigin Color: " + Integer.toHexString(origin.color);
-        }
-        else {
-            content = getString(R.string.ejection_angle_display_fragment_label);
-        }
-
-        ejectionDisplay.setText(content);
+        ejectionAngleDisplayCanvas = (EjectionAngleDisplayCanvas) view.findViewById(R.id.ejectionAngleDisplayCanvas);
 
         return view;
     }
@@ -60,20 +47,18 @@ public class EjectionAngleDisplayFragment extends Fragment {
      * @param orig The origin planet selected in the CalculatorFragment view
      * @param eject The ejection angle calculated by the calculator
      */
-    public void updateEjectionDisplay(Body orig, float eject) {
+    public void updateEjectionDisplay(Body orig, float eject, boolean in) {
         origin = orig;
         ejectionAngle = eject;
+        inner = in;
 
-        String content;
-        if (origin != null) {
-            content = "Origin: " + origin.name + "\nEjection Angle: " + ejectionAngle
-                            + "\nColor:" + Integer.toHexString(origin.color);
+        if (origin!=null) {
+
+            ejectionAngleDisplayCanvas.setOrigin(origin);
+            ejectionAngleDisplayCanvas.setEjectionAngle(ejectionAngle);
+            ejectionAngleDisplayCanvas.setInner(inner);
+
+            ejectionAngleDisplayCanvas.invalidate();
         }
-        else {
-            content = getString(R.string.ejection_angle_display_fragment_label);
-        }
-
-        ejectionDisplay.setText(content);
-
     }
 }

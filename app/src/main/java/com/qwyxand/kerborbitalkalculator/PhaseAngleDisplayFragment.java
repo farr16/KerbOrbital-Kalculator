@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /** PhaseAngleDisplayFragment
  * Created by Matthew on 9/4/2016.
@@ -60,8 +59,8 @@ public class PhaseAngleDisplayFragment extends Fragment {
             phaseAngleDisplayCanvas.setOrigin(origin);
             phaseAngleDisplayCanvas.setDestination(destination);
             phaseAngleDisplayCanvas.setPhaseAngle(phaseAngle);
-
-            phaseAngleDisplayCanvas.invalidate();
         }
+
+        phaseAngleDisplayCanvas.invalidate();
     }
 }

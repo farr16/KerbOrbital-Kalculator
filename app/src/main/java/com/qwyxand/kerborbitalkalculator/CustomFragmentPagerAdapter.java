@@ -17,6 +17,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     private Body destination;
     private float phaseAngle;
     private float ejectionAngle;
+    private boolean inner;
 
     // constructor
     CustomFragmentPagerAdapter(FragmentManager fm){
@@ -27,6 +28,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
         destination = null;
         phaseAngle = Float.NEGATIVE_INFINITY;
         ejectionAngle = Float.NEGATIVE_INFINITY;
+        inner = false;
     }
 
     @Override
@@ -62,7 +64,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
             ((PhaseAngleDisplayFragment) object).updatePhaseDisplay(origin, destination, phaseAngle);
         }
         else if (object instanceof EjectionAngleDisplayFragment) {
-            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, ejectionAngle);
+            ((EjectionAngleDisplayFragment) object).updateEjectionDisplay(origin, ejectionAngle, inner);
         }
         return super.getItemPosition(object);
     }
@@ -83,5 +85,7 @@ class CustomFragmentPagerAdapter extends FragmentPagerAdapter {
     void setPhaseAngle (float phase) {phaseAngle = phase;}
 
     void setEjectionAngle (float eject) {ejectionAngle = eject;}
+
+    void setInner (boolean in) {inner = in;}
 
 }
