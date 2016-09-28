@@ -169,7 +169,8 @@ public class PhaseAngleDisplayCanvas extends View {
         angleDisplayLines.lineTo(x + minDim/2, y);
 
         // Set bounding rectangle for the angle display arc
-        bounds.set((x-outerRad/2), (y-outerRad/2) , (x+outerRad/2), (y+outerRad/2));
+        float angleRad = (origRad < destRad - origRad) ? (origRad + destRad)/2 : origRad/2;
+        bounds.set(x-angleRad, y-angleRad , x+angleRad, y+angleRad);
         angleDisplayLines.addArc(bounds, 0f, -phaseAngle);
 
         // Draw the orbital paths and angle display lines
