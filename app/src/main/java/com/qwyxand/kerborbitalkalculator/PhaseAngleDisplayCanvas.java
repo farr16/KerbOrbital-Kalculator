@@ -40,7 +40,8 @@ public class PhaseAngleDisplayCanvas extends View {
     private Paint originPaint;
     private Paint destinationPaint;
     private Paint angleDisplayPaint;
-    private Paint textPaint;
+    private Paint bodyLabelPaint;
+    private Paint arcLabelPaint;
 
     public PhaseAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -81,9 +82,11 @@ public class PhaseAngleDisplayCanvas extends View {
         destinationPaint = new Paint();
         destinationPaint.setAntiAlias(true);
 
-        textPaint = new Paint();
-        textPaint.setColor(Color.BLACK);
-
+        // Setup paint for drawing text labels
+        bodyLabelPaint = new Paint();
+        bodyLabelPaint.setColor(Color.BLACK);
+        arcLabelPaint = new Paint();
+        arcLabelPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
     }
 
     @Override
@@ -186,10 +189,15 @@ public class PhaseAngleDisplayCanvas extends View {
         // Draw text labels for the origin, parent, and destination bodies
         // If origin is on the outer orbit, offset name tag slightly so it doesn't go off canvas
         float offset = (origRad == outerRad) ? -bodyRadius*2 : 0;
-        canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, textPaint);
+        canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, bodyLabelPaint);
 
-        canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, textPaint);
-        canvas.drawText(destination.name, destX, destY+bodyRadius*2, textPaint);
+        canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, bodyLabelPaint);
+        canvas.drawText(destination.name, destX, destY+bodyRadius*2, bodyLabelPaint);
+
+        // Draw angle arc display text
+        float angleDisplayX = (angleRad+bodyRadius) * (float) Math.cos(Math.toRadians(phaseAngle/2));
+        float angleDisplayY = (angleRad+bodyRadius) * (float) Math.sin(Math.toRadians(phaseAngle/2));
+        canvas.drawText(phaseAngle + "°", x +angleDisplayX,  y - angleDisplayY, arcLabelPaint);
     }
 
     // Setter methods for private variables
