@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -27,13 +28,15 @@ public class PhaseAngleDisplayCanvas extends View {
 
     private Path originOrbit;
     private Path destinationOrbit;
-    private Path kerbolDraw;
+    private Path parentDraw;
     private Path originDraw;
     private Path destinationDraw;
     private Path angleDisplayLines;
 
+    private RectF bounds;
+
     private Paint orbitPaint;
-    private Paint kerbolPaint;
+    private Paint parentPaint;
     private Paint originPaint;
     private Paint destinationPaint;
     private Paint angleDisplayPaint;
@@ -45,10 +48,13 @@ public class PhaseAngleDisplayCanvas extends View {
         // Setup path variables which will store draw shapes
         originOrbit = new Path();
         destinationOrbit = new Path();
-        kerbolDraw = new Path();
+        parentDraw = new Path();
         originDraw = new Path();
         destinationDraw = new Path();
         angleDisplayLines = new Path();
+
+        // Setup RectF for bounds on the angle display arc with default values
+        bounds = new RectF(-1f, -1f, 1f, 1f);
 
         // Setup paint for drawing orbit circles
         orbitPaint = new Paint();
@@ -65,9 +71,9 @@ public class PhaseAngleDisplayCanvas extends View {
         angleDisplayPaint.setStrokeWidth(2f);
 
         // Setup paint for drawing sun
-        kerbolPaint = new Paint();
-        kerbolPaint.setAntiAlias(true);
-        kerbolPaint.setColor(ContextCompat.getColor(c, R.color.colorKerbolDisplay));
+         parentPaint = new Paint();
+         parentPaint.setAntiAlias(true);
+         parentPaint.setColor(ContextCompat.getColor(c, R.color.colorKerbolDisplay));
 
         // Setup paint for drawing origin and destination (without color)
         originPaint = new Paint();
@@ -99,7 +105,7 @@ public class PhaseAngleDisplayCanvas extends View {
         super.onDraw(canvas);
 
         // Reset paths so any previous contents aren't drawn again
-        kerbolDraw.reset();
+        parentDraw.reset();
         originOrbit.reset();
         destinationOrbit.reset();
         originDraw.reset();
@@ -115,7 +121,7 @@ public class PhaseAngleDisplayCanvas extends View {
         float bodyRadius = 10f;
 
         // Draw the central body in the center of the screen
-        kerbolDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
+        parentDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
 
         float outerRad = minDim/2 - bodyRadius*2;
         float minInnerRad = 4 * bodyRadius;
@@ -141,10 +147,7 @@ public class PhaseAngleDisplayCanvas extends View {
             originOrbit.addCircle(x, y, destRad, Path.Direction.CW);
         }
 
-        originPaint.setAntiAlias(true);
         originPaint.setColor(origin.color);
-
-        destinationPaint.setAntiAlias(true);
         destinationPaint.setColor(destination.color);
 
         // Place the origin planet along the vertical center of the screen on its orbit
@@ -160,18 +163,30 @@ public class PhaseAngleDisplayCanvas extends View {
         float destY = (y - phaseSin*destRad);
         destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
 
+        // Create lines which highlight the angle between the origin and destination body
         angleDisplayLines.moveTo(x + phaseCos*minDim/2, y - phaseSin*minDim/2);
         angleDisplayLines.lineTo(x,y);
         angleDisplayLines.lineTo(x + minDim/2, y);
 
+        // Set bounding rectangle for the angle display arc
+        bounds.set((x-outerRad/2), (y-outerRad/2) , (x+outerRad/2), (y+outerRad/2));
+        angleDisplayLines.addArc(bounds, 0f, -phaseAngle);
+
+        // Draw the orbital paths and angle display lines
         canvas.drawPath(originOrbit, orbitPaint);
         canvas.drawPath(destinationOrbit, orbitPaint);
         canvas.drawPath(angleDisplayLines, angleDisplayPaint);
-        canvas.drawPath(kerbolDraw, kerbolPaint);
+
+        // Draw the parent, origin, and destination bodies
+        canvas.drawPath(parentDraw, parentPaint);
         canvas.drawPath(originDraw, originPaint);
         canvas.drawPath(destinationDraw, destinationPaint);
+
+        // Draw text labels for the origin, parent, and destination bodies
+        // If origin is on the outer orbit, offset name tag slightly so it doesn't go off canvas
         float offset = (origRad == outerRad) ? -bodyRadius*2 : 0;
         canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, textPaint);
+
         canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, textPaint);
         canvas.drawText(destination.name, destX, destY+bodyRadius*2, textPaint);
     }
