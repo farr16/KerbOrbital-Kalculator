@@ -85,6 +85,8 @@ public class PhaseAngleDisplayCanvas extends View {
         // Setup paint for drawing text labels
         bodyLabelPaint = new Paint();
         bodyLabelPaint.setColor(Color.BLACK);
+        bodyLabelPaint.setTextAlign(Paint.Align.CENTER);
+        
         arcLabelPaint = new Paint();
         arcLabelPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
     }
@@ -117,6 +119,7 @@ public class PhaseAngleDisplayCanvas extends View {
 
         // If one of the values required to draw the view isn't set up, return without drawing
         if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY) {
+            canvas.drawText("Phase angle has not been calculated", x, y , bodyLabelPaint);
             return;
         }
 

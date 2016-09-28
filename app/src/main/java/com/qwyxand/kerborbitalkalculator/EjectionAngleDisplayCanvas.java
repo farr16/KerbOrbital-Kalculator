@@ -1,6 +1,10 @@
 package com.qwyxand.kerborbitalkalculator;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,8 +21,67 @@ public class EjectionAngleDisplayCanvas extends View {
     private float ejectionAngle;
     private boolean inner;
 
+    private float y;
+    private float x;
+    private float minDim;
+
+    private Paint orbitPaint;
+    private Paint originPaint;
+    private Paint originLabelPaint;
+    private Paint labelPaint;
+
     public EjectionAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
+
+        orbitPaint = new Paint();
+        orbitPaint.setAntiAlias(true);
+        orbitPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles));
+        orbitPaint.setStyle(Paint.Style.STROKE);
+        orbitPaint.setStrokeWidth(2f);
+
+        originPaint = new Paint();
+        originPaint.setAntiAlias(true);
+
+        originLabelPaint = new Paint();
+        originLabelPaint.setColor(Color.WHITE);
+        originLabelPaint.setTextAlign(Paint.Align.CENTER);
+
+        labelPaint = new Paint();
+        labelPaint.setColor(Color.BLACK);
+        labelPaint.setTextAlign(Paint.Align.CENTER);
+    }
+
+    @Override
+    /** onSizeChanged
+     * Overridden to store coordinates of the center of the canvas whenever the canvas is resized,
+     * and to calculate which dimension is smaller so drawn circles don't exceed the size of the
+     * canvas.
+     */
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        x = w/2;
+        y = h/2;
+        minDim = (h>w) ? w : h;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        // If one of the values required to draw the view isn't set up, return without drawing
+        if (origin == null || ejectionAngle == Float.NEGATIVE_INFINITY) {
+            canvas.drawText("Ejection angle has not been calculated", x, y, labelPaint);
+            return;
+        }
+
+        float originRad = minDim/8;
+        originPaint.setColor(origin.color);
+        canvas.drawCircle(x,y,originRad, originPaint);
+
+        canvas.drawText(origin.name, x, y, originLabelPaint);
+
+        float orbitRad = originRad * 1.2f;
+        canvas.drawCircle(x,y,orbitRad, orbitPaint);
     }
 
     public void setOrigin(Body orig) {
