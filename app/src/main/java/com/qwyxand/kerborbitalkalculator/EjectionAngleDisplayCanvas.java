@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -32,6 +31,7 @@ public class EjectionAngleDisplayCanvas extends View {
     private Paint originLabelPaint;
     private Paint labelPaint;
     private Paint angleDisplayPaint;
+    private Paint arcLabelPaint;
 
     private RectF bounds;
 
@@ -61,6 +61,10 @@ public class EjectionAngleDisplayCanvas extends View {
         angleDisplayPaint.setStyle(Paint.Style.STROKE);
         angleDisplayPaint.setStrokeWidth(2f);
 
+        arcLabelPaint = new Paint();
+        arcLabelPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
+        arcLabelPaint.setTextAlign(Paint.Align.CENTER);
+
         bounds = new RectF (0f, 0f, 0f, 0f);
     }
 
@@ -87,27 +91,37 @@ public class EjectionAngleDisplayCanvas extends View {
             return;
         }
 
-        float angleDisplayRad = minDim/2;
+        float angleRad = minDim/2;
 
         if (inner) {
-            canvas.drawLine(x, y-angleDisplayRad, x, y, angleDisplayPaint);
-            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle-90)) * angleDisplayRad;
-            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle-90)) * angleDisplayRad;
+            canvas.drawLine(x, y-angleRad, x, y, angleDisplayPaint);
+            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle-90)) * angleRad;
+            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle-90)) * angleRad;
             canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
 
-            angleDisplayRad *= 0.66f;
-            bounds.set(x-angleDisplayRad, y-angleDisplayRad, x+angleDisplayRad, y+angleDisplayRad);
+            angleRad *= 0.66f;
+            bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
             canvas.drawArc(bounds, ejectionAngle-90, -ejectionAngle, false, angleDisplayPaint);
+
+            angleRad *= 1.2f;
+            float textX = x + (float) Math.cos(Math.toRadians(270 + ejectionAngle/2)) * angleRad;
+            float textY = y + (float) Math.sin(Math.toRadians(270 + ejectionAngle/2)) * angleRad;
+            canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
         }
         else {
-            canvas.drawLine(x, y+angleDisplayRad, x, y, angleDisplayPaint);
-            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle+90)) * angleDisplayRad;
-            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle+90)) * angleDisplayRad;
+            canvas.drawLine(x, y+angleRad, x, y, angleDisplayPaint);
+            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle+90)) * angleRad;
+            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle+90)) * angleRad;
             canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
 
-            angleDisplayRad *= 0.66f;
-            bounds.set(x-angleDisplayRad, y-angleDisplayRad, x+angleDisplayRad, y+angleDisplayRad);
+            angleRad *= 0.66f;
+            bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
             canvas.drawArc(bounds, ejectionAngle+90, -ejectionAngle, false, angleDisplayPaint);
+
+            angleRad *= 1.2f;
+            float textX = x + (float) Math.cos(Math.toRadians(90 + ejectionAngle/2)) * angleRad;
+            float textY = y + (float) Math.sin(Math.toRadians(90 + ejectionAngle/2)) * angleRad;
+            canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
         }
 
         float originRad = minDim/8;

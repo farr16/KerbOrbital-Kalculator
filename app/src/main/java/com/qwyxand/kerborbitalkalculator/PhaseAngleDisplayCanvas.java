@@ -197,8 +197,8 @@ public class PhaseAngleDisplayCanvas extends View {
         canvas.drawText(destination.name, destX, destY+bodyRadius*2, bodyLabelPaint);
 
         // Draw angle arc display text
-        float angleDisplayX = (angleRad+bodyRadius) * (float) Math.cos(Math.toRadians(phaseAngle/2));
-        float angleDisplayY = (angleRad+bodyRadius) * (float) Math.sin(Math.toRadians(phaseAngle/2));
+        float angleDisplayX = (angleRad*1.1f) * (float) Math.cos(Math.toRadians(phaseAngle/2));
+        float angleDisplayY = (angleRad*1.1f) * (float) Math.sin(Math.toRadians(phaseAngle/2));
         canvas.drawText(phaseAngle + "°", x +angleDisplayX,  y - angleDisplayY, arcLabelPaint);
     }
 
