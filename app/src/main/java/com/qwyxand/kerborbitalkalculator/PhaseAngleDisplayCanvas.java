@@ -26,11 +26,6 @@ public class PhaseAngleDisplayCanvas extends View {
     private float x;
     private float minDim;
 
-    private Path originOrbit;
-    private Path destinationOrbit;
-    private Path parentDraw;
-    private Path originDraw;
-    private Path destinationDraw;
     private Path angleDisplayLines;
 
     private RectF bounds;
@@ -47,11 +42,6 @@ public class PhaseAngleDisplayCanvas extends View {
         super(c, attrs);
 
         // Setup path variables which will store draw shapes
-        originOrbit = new Path();
-        destinationOrbit = new Path();
-        parentDraw = new Path();
-        originDraw = new Path();
-        destinationDraw = new Path();
         angleDisplayLines = new Path();
 
         // Setup RectF for bounds on the angle display arc with default values
@@ -109,11 +99,8 @@ public class PhaseAngleDisplayCanvas extends View {
         super.onDraw(canvas);
 
         // Reset paths so any previous contents aren't drawn again
-        parentDraw.reset();
-        originOrbit.reset();
-        destinationOrbit.reset();
-        originDraw.reset();
-        destinationDraw.reset();
+        //originDraw.reset();
+        //destinationDraw.reset();
         angleDisplayLines.reset();
 
         // If one of the values required to draw the view isn't set up, return without drawing
@@ -125,48 +112,40 @@ public class PhaseAngleDisplayCanvas extends View {
         // TODO: Replace with different sizes for different display densities/sizes
         float bodyRadius = 10f;
 
-        // Draw the central body in the center of the screen
-        parentDraw.addCircle(x, y, bodyRadius, Path.Direction.CW);
-
         float outerRad = minDim/2 - bodyRadius*2;
         float minInnerRad = 4 * bodyRadius;
 
         float origRad;
         float destRad;
 
-        // Setup the paths for drawing each orbit circle
+        // Determine which radius is smaller, scale that orbit's display size relative to the larger one
         if (origin.sma < destination.sma) {
             destRad = outerRad;
-            destinationOrbit.addCircle(x, y, destRad, Path.Direction.CW);
             origRad = origin.sma/destination.sma * destRad;
             if (origRad < minInnerRad)
                 origRad = minInnerRad;
-            originOrbit.addCircle(x, y, origRad, Path.Direction.CW);
         }
         else {
             origRad = outerRad;
-            originOrbit.addCircle(x, y, origRad, Path.Direction.CW);
             destRad = destination.sma/origin.sma * origRad;
             if (destRad < minInnerRad)
                 destRad = minInnerRad;
-            originOrbit.addCircle(x, y, destRad, Path.Direction.CW);
         }
+
+        canvas.drawCircle(x, y, destRad, orbitPaint);
+        canvas.drawCircle(x, y, origRad, orbitPaint);
 
         originPaint.setColor(origin.color);
         destinationPaint.setColor(destination.color);
-
-        // Place the origin planet along the vertical center of the screen on its orbit
-        originDraw.addCircle(x+origRad, y, bodyRadius, Path.Direction.CW);
 
         // Calculate sin and cos for phase angle, which will be used to place the destination planet
         // And to draw the angle display
         float phaseCos = (float) Math.cos(Math.toRadians(phaseAngle));
         float phaseSin = (float) Math.sin(Math.toRadians(phaseAngle));
 
-        // Place the destination planet on its orbit offset from the origin planet by the phase angle
+        // Calculate location along its orbit for the destination planet
         float destX = (x + phaseCos*destRad);
         float destY = (y - phaseSin*destRad);
-        destinationDraw.addCircle(destX, destY, bodyRadius, Path.Direction.CW);
 
         // Create lines which highlight the angle between the origin and destination body
         angleDisplayLines.moveTo(x + phaseCos*minDim/2, y - phaseSin*minDim/2);
@@ -179,14 +158,12 @@ public class PhaseAngleDisplayCanvas extends View {
         angleDisplayLines.addArc(bounds, 0f, -phaseAngle);
 
         // Draw the orbital paths and angle display lines
-        canvas.drawPath(originOrbit, orbitPaint);
-        canvas.drawPath(destinationOrbit, orbitPaint);
         canvas.drawPath(angleDisplayLines, angleDisplayPaint);
 
         // Draw the parent, origin, and destination bodies
-        canvas.drawPath(parentDraw, parentPaint);
-        canvas.drawPath(originDraw, originPaint);
-        canvas.drawPath(destinationDraw, destinationPaint);
+        canvas.drawCircle(x, y, bodyRadius, parentPaint);
+        canvas.drawCircle(x + origRad, y, bodyRadius, originPaint);
+        canvas.drawCircle(destX, destY, bodyRadius, destinationPaint);
 
         // Draw text labels for the origin, parent, and destination bodies
         // If origin is on the outer orbit, offset name tag slightly so it doesn't go off canvas
