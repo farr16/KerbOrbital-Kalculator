@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -26,8 +25,6 @@ public class PhaseAngleDisplayCanvas extends View {
     private float x;
     private float minDim;
 
-    private Path angleDisplayLines;
-
     private RectF bounds;
 
     private Paint orbitPaint;
@@ -40,9 +37,6 @@ public class PhaseAngleDisplayCanvas extends View {
 
     public PhaseAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
-
-        // Setup path variables which will store draw shapes
-        angleDisplayLines = new Path();
 
         // Setup RectF for bounds on the angle display arc with default values
         bounds = new RectF(-1f, -1f, 1f, 1f);
@@ -98,11 +92,6 @@ public class PhaseAngleDisplayCanvas extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Reset paths so any previous contents aren't drawn again
-        //originDraw.reset();
-        //destinationDraw.reset();
-        angleDisplayLines.reset();
-
         // If one of the values required to draw the view isn't set up, return without drawing
         if (origin == null || destination == null || phaseAngle == Float.NEGATIVE_INFINITY) {
             canvas.drawText("Phase angle has not been calculated", x, y , bodyLabelPaint);
@@ -132,6 +121,7 @@ public class PhaseAngleDisplayCanvas extends View {
                 destRad = minInnerRad;
         }
 
+        // Draw the origin and destination orbits
         canvas.drawCircle(x, y, destRad, orbitPaint);
         canvas.drawCircle(x, y, origRad, orbitPaint);
 
@@ -147,18 +137,12 @@ public class PhaseAngleDisplayCanvas extends View {
         float destX = (x + phaseCos*destRad);
         float destY = (y - phaseSin*destRad);
 
-        // Create lines which highlight the angle between the origin and destination body
-        angleDisplayLines.moveTo(x + phaseCos*minDim/2, y - phaseSin*minDim/2);
-        angleDisplayLines.lineTo(x,y);
-        angleDisplayLines.lineTo(x + minDim/2, y);
-
-        // Set bounding rectangle for the angle display arc
+        // Draw the angle display lines and the angle display arc
+        canvas.drawLine(x + phaseCos*minDim/2, y - phaseSin*minDim/2, x, y, angleDisplayPaint);
         float angleRad = (origRad < destRad - origRad) ? (origRad + destRad)/2 : origRad/2;
         bounds.set(x-angleRad, y-angleRad , x+angleRad, y+angleRad);
-        angleDisplayLines.addArc(bounds, 0f, -phaseAngle);
-
-        // Draw the orbital paths and angle display lines
-        canvas.drawPath(angleDisplayLines, angleDisplayPaint);
+        canvas.drawLine(x, y, x+minDim/2, y, angleDisplayPaint);
+        canvas.drawArc(bounds, 0f, -phaseAngle, false, angleDisplayPaint);
 
         // Draw the parent, origin, and destination bodies
         canvas.drawCircle(x, y, bodyRadius, parentPaint);
@@ -169,7 +153,6 @@ public class PhaseAngleDisplayCanvas extends View {
         // If origin is on the outer orbit, offset name tag slightly so it doesn't go off canvas
         float offset = (origRad == outerRad) ? -bodyRadius*2 : 0;
         canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, bodyLabelPaint);
-
         canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, bodyLabelPaint);
         canvas.drawText(destination.name, destX, destY+bodyRadius*2, bodyLabelPaint);
 
