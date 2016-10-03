@@ -102,6 +102,7 @@ public class PhaseAngleDisplayCanvas extends View {
         float bodyRadius = 10f;
 
         float outerRad = minDim/2 - bodyRadius*2;
+        float innerRad;
         float minInnerRad = 4 * bodyRadius;
 
         float origRad;
@@ -113,12 +114,14 @@ public class PhaseAngleDisplayCanvas extends View {
             origRad = origin.sma/destination.sma * destRad;
             if (origRad < minInnerRad)
                 origRad = minInnerRad;
+            innerRad = origRad;
         }
         else {
             origRad = outerRad;
             destRad = destination.sma/origin.sma * origRad;
             if (destRad < minInnerRad)
                 destRad = minInnerRad;
+            innerRad = destRad;
         }
 
         // Draw the origin and destination orbits
@@ -139,7 +142,7 @@ public class PhaseAngleDisplayCanvas extends View {
 
         // Draw the angle display lines and the angle display arc
         canvas.drawLine(x + phaseCos*minDim/2, y - phaseSin*minDim/2, x, y, angleDisplayPaint);
-        float angleRad = (origRad < destRad - origRad) ? (origRad + destRad)/2 : origRad/2;
+        float angleRad = (innerRad < outerRad - innerRad) ? (innerRad + outerRad)/2 : innerRad/2;
         bounds.set(x-angleRad, y-angleRad , x+angleRad, y+angleRad);
         canvas.drawLine(x, y, x+minDim/2, y, angleDisplayPaint);
         canvas.drawArc(bounds, 0f, -phaseAngle, false, angleDisplayPaint);
