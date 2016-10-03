@@ -93,36 +93,38 @@ public class EjectionAngleDisplayCanvas extends View {
 
         float angleRad = minDim/2;
 
+        /* This float stores the angle (in degrees) used when drawing the angle to the screen, as
+         * opposed to the variable ejectionAngle which stores angle from the origin's prograde or
+         * retrograde  */
+        float ejectDisplayAngle;
+
+        float textAngleOffset;
+
         if (inner) {
+            ejectDisplayAngle = ejectionAngle-90;
+            textAngleOffset = 270 + ejectionAngle/2;
+            //Draw first line in arc display in direction of origin's prograde vector
             canvas.drawLine(x, y-angleRad, x, y, angleDisplayPaint);
-            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle-90)) * angleRad;
-            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle-90)) * angleRad;
-            canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
-
-            angleRad *= 0.66f;
-            bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
-            canvas.drawArc(bounds, ejectionAngle-90, -ejectionAngle, false, angleDisplayPaint);
-
-            angleRad *= 1.2f;
-            float textX = x + (float) Math.cos(Math.toRadians(270 + ejectionAngle/2)) * angleRad;
-            float textY = y + (float) Math.sin(Math.toRadians(270 + ejectionAngle/2)) * angleRad;
-            canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
         }
         else {
+            ejectDisplayAngle = ejectionAngle+90;
+            textAngleOffset = 90 + ejectionAngle/2;
+            //draw first line in arc display in direction of origin's retrograde vector
             canvas.drawLine(x, y+angleRad, x, y, angleDisplayPaint);
-            float endPointX = x + (float) Math.cos(Math.toRadians(ejectionAngle+90)) * angleRad;
-            float endPointY = y + (float) Math.sin(Math.toRadians(ejectionAngle+90)) * angleRad;
-            canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
-
-            angleRad *= 0.66f;
-            bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
-            canvas.drawArc(bounds, ejectionAngle+90, -ejectionAngle, false, angleDisplayPaint);
-
-            angleRad *= 1.2f;
-            float textX = x + (float) Math.cos(Math.toRadians(90 + ejectionAngle/2)) * angleRad;
-            float textY = y + (float) Math.sin(Math.toRadians(90 + ejectionAngle/2)) * angleRad;
-            canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
         }
+
+        float endPointX = x + (float) Math.cos(Math.toRadians(ejectDisplayAngle)) * angleRad;
+        float endPointY = y + (float) Math.sin(Math.toRadians(ejectDisplayAngle)) * angleRad;
+        canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
+
+        angleRad *= 0.66f;
+        bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
+        canvas.drawArc(bounds, ejectDisplayAngle, -ejectionAngle, false, angleDisplayPaint);
+
+        angleRad *= 1.3f;
+        float textX = x + (float) Math.cos(Math.toRadians(textAngleOffset)) * angleRad;
+        float textY = y + (float) Math.sin(Math.toRadians(textAngleOffset)) * angleRad;
+        canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
 
         float originRad = minDim/8;
         originPaint.setColor(origin.color);
