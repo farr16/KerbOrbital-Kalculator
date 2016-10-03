@@ -62,7 +62,7 @@ public class EjectionAngleDisplayCanvas extends View {
         angleDisplayPaint.setStrokeWidth(2f);
 
         arcLabelPaint = new Paint();
-        arcLabelPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
+        arcLabelPaint.setColor(Color.BLACK);
         arcLabelPaint.setTextAlign(Paint.Align.CENTER);
 
         bounds = new RectF (0f, 0f, 0f, 0f);

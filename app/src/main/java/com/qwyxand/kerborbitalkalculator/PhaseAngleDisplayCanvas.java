@@ -71,7 +71,7 @@ public class PhaseAngleDisplayCanvas extends View {
         bodyLabelPaint.setColor(Color.BLACK);
         bodyLabelPaint.setTextAlign(Paint.Align.CENTER);
         arcLabelPaint = new Paint();
-        arcLabelPaint.setColor(ContextCompat.getColor(c, R.color.colorAngleLines));
+        arcLabelPaint.setColor(Color.BLACK);
     }
 
     @Override
