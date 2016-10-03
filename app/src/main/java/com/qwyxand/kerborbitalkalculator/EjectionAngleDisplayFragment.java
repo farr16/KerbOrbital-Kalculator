@@ -52,12 +52,9 @@ public class EjectionAngleDisplayFragment extends Fragment {
         ejectionAngle = eject;
         inner = in;
 
-        if (origin!=null) {
-
-            ejectionAngleDisplayCanvas.setOrigin(origin);
-            ejectionAngleDisplayCanvas.setEjectionAngle(ejectionAngle);
-            ejectionAngleDisplayCanvas.setInner(inner);
-        }
+        ejectionAngleDisplayCanvas.setOrigin(origin);
+        ejectionAngleDisplayCanvas.setEjectionAngle(ejectionAngle);
+        ejectionAngleDisplayCanvas.setInner(inner);
 
         ejectionAngleDisplayCanvas.invalidate();
     }

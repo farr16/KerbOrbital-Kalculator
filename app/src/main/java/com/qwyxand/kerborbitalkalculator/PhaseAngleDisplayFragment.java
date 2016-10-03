@@ -54,12 +54,9 @@ public class PhaseAngleDisplayFragment extends Fragment {
         destination = dest;
         phaseAngle = phase;
 
-        if (origin!=null && destination!=null) {
-
-            phaseAngleDisplayCanvas.setOrigin(origin);
-            phaseAngleDisplayCanvas.setDestination(destination);
-            phaseAngleDisplayCanvas.setPhaseAngle(phaseAngle);
-        }
+        phaseAngleDisplayCanvas.setOrigin(origin);
+        phaseAngleDisplayCanvas.setDestination(destination);
+        phaseAngleDisplayCanvas.setPhaseAngle(phaseAngle);
 
         phaseAngleDisplayCanvas.invalidate();
     }
