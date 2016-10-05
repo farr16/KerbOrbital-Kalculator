@@ -156,7 +156,7 @@ public class PhaseAngleDisplayCanvas extends View {
         // If origin is on the outer orbit, offset name tag slightly so it doesn't go off canvas
         float offset = (origRad == outerRad) ? -bodyRadius*2 : 0;
         canvas.drawText(origin.name, x+origRad+offset, y+bodyRadius*2, bodyLabelPaint);
-        canvas.drawText("Kerbol", x - bodyRadius, y + bodyRadius*2, bodyLabelPaint);
+        canvas.drawText("Kerbol", x, y + bodyRadius*2, bodyLabelPaint);
         canvas.drawText(destination.name, destX, destY+bodyRadius*2, bodyLabelPaint);
 
         // Draw angle arc display text

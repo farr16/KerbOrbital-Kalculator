@@ -51,11 +51,11 @@ public class EjectionAngleDisplayCanvas extends View {
 
         arrowPaint = new Paint();
         arrowPaint.setAntiAlias(true);
-        arrowPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles)); // Replace with own color later
+        arrowPaint.setColor(ContextCompat.getColor(c, R.color.colorArrowDisplay));
 
         shipPaint = new Paint();
         shipPaint.setAntiAlias(true);
-        shipPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles)); // Replace with own color later
+        shipPaint.setColor(ContextCompat.getColor(c, R.color.colorShipDisplay));
 
         originPaint = new Paint();
         originPaint.setAntiAlias(true);
@@ -151,7 +151,6 @@ public class EjectionAngleDisplayCanvas extends View {
         // Draw triangle representing the player's craft in the view
         shipPath.reset();
         float triSize = 15f;
-
         float triCenX = (float) (x + Math.cos(Math.toRadians(ejectDisplayAngle)) * orbitRad);
         float triCenY = (float) (y +Math.sin(Math.toRadians(ejectDisplayAngle)) * orbitRad);
         shipPath.moveTo(triCenX, triCenY - triSize/2);

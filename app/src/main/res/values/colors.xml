@@ -15,6 +15,8 @@
     <color name="colorEelooDisplay">#14D2DC</color>
     <color name="colorKerbolDisplay">#F0F032</color>
 
-    <color name="colorOrbitCircles">#666666</color>
     <color name="colorAngleLines">#FA78FA</color>
+    <color name="colorOrbitCircles">#cccccc</color>
+    <color name="colorArrowDisplay">#999999</color>
+    <color name="colorShipDisplay">#4c4c4c</color>
 </resources>
