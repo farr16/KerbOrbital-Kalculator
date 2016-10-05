@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -31,9 +32,11 @@ public class EjectionAngleDisplayCanvas extends View {
     private Paint originLabelPaint;
     private Paint labelPaint;
     private Paint angleDisplayPaint;
-    private Paint arcLabelPaint;
+    private Paint arrowPaint;
 
     private RectF bounds;
+
+    private Path path;
 
     public EjectionAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -43,6 +46,10 @@ public class EjectionAngleDisplayCanvas extends View {
         orbitPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles));
         orbitPaint.setStyle(Paint.Style.STROKE);
         orbitPaint.setStrokeWidth(2f);
+
+        arrowPaint = new Paint();
+        arrowPaint.setAntiAlias(true);
+        arrowPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles)); // Replace with own color later
 
         originPaint = new Paint();
         originPaint.setAntiAlias(true);
@@ -61,11 +68,9 @@ public class EjectionAngleDisplayCanvas extends View {
         angleDisplayPaint.setStyle(Paint.Style.STROKE);
         angleDisplayPaint.setStrokeWidth(2f);
 
-        arcLabelPaint = new Paint();
-        arcLabelPaint.setColor(Color.BLACK);
-        arcLabelPaint.setTextAlign(Paint.Align.CENTER);
-
         bounds = new RectF (0f, 0f, 0f, 0f);
+
+        path = new Path();
     }
 
     @Override
@@ -112,7 +117,6 @@ public class EjectionAngleDisplayCanvas extends View {
             //draw first line in arc display in direction of origin's retrograde vector
             canvas.drawLine(x, y+angleRad, x, y, angleDisplayPaint);
         }
-
         float endPointX = x + (float) Math.cos(Math.toRadians(ejectDisplayAngle)) * angleRad;
         float endPointY = y + (float) Math.sin(Math.toRadians(ejectDisplayAngle)) * angleRad;
         canvas.drawLine(x, y, endPointX, endPointY, angleDisplayPaint);
@@ -124,7 +128,7 @@ public class EjectionAngleDisplayCanvas extends View {
         angleRad *= 1.3f;
         float textX = x + (float) Math.cos(Math.toRadians(textAngleOffset)) * angleRad;
         float textY = y + (float) Math.sin(Math.toRadians(textAngleOffset)) * angleRad;
-        canvas.drawText(ejectionAngle + "°", textX, textY, arcLabelPaint);
+        canvas.drawText(ejectionAngle + "°", textX, textY, labelPaint);
 
         float originRad = minDim/8;
         originPaint.setColor(origin.color);
@@ -135,6 +139,24 @@ public class EjectionAngleDisplayCanvas extends View {
 
         float orbitRad = originRad * 1.75f;
         canvas.drawCircle(x,y,orbitRad, orbitPaint);
+
+        // Draw arrow showing the direction of the ship's orbit around the origin body
+        path.reset();
+        float arcRadius = orbitRad * 1.25f;
+        bounds.set(x-arcRadius, y-arcRadius, x+arcRadius, y+arcRadius);
+        float coverage = -30f;
+
+        arrowPaint.setStyle(Paint.Style.STROKE);
+        canvas.drawArc(bounds, ejectDisplayAngle - coverage/2, coverage, false, arrowPaint);
+        float triCenX = (float) (x + arcRadius*Math.cos(Math.toRadians(ejectDisplayAngle + coverage/2)));
+        float triCenY = (float) (y + arcRadius*Math.sin(Math.toRadians(ejectDisplayAngle + coverage/2)));
+        float triSize = 10f;
+        path.moveTo(triCenX, triCenY - triSize/2);
+        path.lineTo(triCenX - triSize/2, triCenY + triSize/2);
+        path.lineTo(triCenX + triSize/2, triCenY + triSize/2);
+        arrowPaint.setStyle(Paint.Style.FILL);
+        canvas.rotate(ejectDisplayAngle + coverage/2, triCenX, triCenY);
+        canvas.drawPath(path, arrowPaint);
     }
 
     public void setOrigin(Body orig) {
