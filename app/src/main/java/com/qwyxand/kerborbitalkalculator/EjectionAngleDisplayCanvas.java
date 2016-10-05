@@ -33,10 +33,12 @@ public class EjectionAngleDisplayCanvas extends View {
     private Paint labelPaint;
     private Paint angleDisplayPaint;
     private Paint arrowPaint;
+    private Paint shipPaint;
 
     private RectF bounds;
 
-    private Path path;
+    private Path arrowPath;
+    private Path shipPath;
 
     public EjectionAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -50,6 +52,10 @@ public class EjectionAngleDisplayCanvas extends View {
         arrowPaint = new Paint();
         arrowPaint.setAntiAlias(true);
         arrowPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles)); // Replace with own color later
+
+        shipPaint = new Paint();
+        shipPaint.setAntiAlias(true);
+        shipPaint.setColor(ContextCompat.getColor(c, R.color.colorOrbitCircles)); // Replace with own color later
 
         originPaint = new Paint();
         originPaint.setAntiAlias(true);
@@ -70,7 +76,8 @@ public class EjectionAngleDisplayCanvas extends View {
 
         bounds = new RectF (0f, 0f, 0f, 0f);
 
-        path = new Path();
+        arrowPath = new Path();
+        shipPath = new Path();
     }
 
     @Override
@@ -137,26 +144,40 @@ public class EjectionAngleDisplayCanvas extends View {
 
         canvas.drawText(origin.name, x, y, originLabelPaint);
 
+
         float orbitRad = originRad * 1.75f;
         canvas.drawCircle(x,y,orbitRad, orbitPaint);
 
+        // Draw triangle representing the player's craft in the view
+        shipPath.reset();
+        float triSize = 15f;
+
+        float triCenX = (float) (x + Math.cos(Math.toRadians(ejectDisplayAngle)) * orbitRad);
+        float triCenY = (float) (y +Math.sin(Math.toRadians(ejectDisplayAngle)) * orbitRad);
+        shipPath.moveTo(triCenX, triCenY - triSize/2);
+        shipPath.lineTo(triCenX - triSize/2, triCenY + triSize/2);
+        shipPath.lineTo(triCenX + triSize/2, triCenY + triSize/2);
+        canvas.rotate(ejectDisplayAngle, triCenX, triCenY);
+        canvas.drawPath(shipPath, shipPaint);
+        canvas.rotate(-ejectDisplayAngle, triCenX, triCenY);
+
         // Draw arrow showing the direction of the ship's orbit around the origin body
-        path.reset();
+        arrowPath.reset();
         float arcRadius = orbitRad * 1.25f;
         bounds.set(x-arcRadius, y-arcRadius, x+arcRadius, y+arcRadius);
         float coverage = -30f;
 
         arrowPaint.setStyle(Paint.Style.STROKE);
         canvas.drawArc(bounds, ejectDisplayAngle - coverage/2, coverage, false, arrowPaint);
-        float triCenX = (float) (x + arcRadius*Math.cos(Math.toRadians(ejectDisplayAngle + coverage/2)));
-        float triCenY = (float) (y + arcRadius*Math.sin(Math.toRadians(ejectDisplayAngle + coverage/2)));
-        float triSize = 10f;
-        path.moveTo(triCenX, triCenY - triSize/2);
-        path.lineTo(triCenX - triSize/2, triCenY + triSize/2);
-        path.lineTo(triCenX + triSize/2, triCenY + triSize/2);
+        triCenX = (float) (x + arcRadius*Math.cos(Math.toRadians(ejectDisplayAngle + coverage/2)));
+        triCenY = (float) (y + arcRadius*Math.sin(Math.toRadians(ejectDisplayAngle + coverage/2)));
+        triSize = 10f;
+        arrowPath.moveTo(triCenX, triCenY - triSize/2);
+        arrowPath.lineTo(triCenX - triSize/2, triCenY + triSize/2);
+        arrowPath.lineTo(triCenX + triSize/2, triCenY + triSize/2);
         arrowPaint.setStyle(Paint.Style.FILL);
         canvas.rotate(ejectDisplayAngle + coverage/2, triCenX, triCenY);
-        canvas.drawPath(path, arrowPaint);
+        canvas.drawPath(arrowPath, arrowPaint);
     }
 
     public void setOrigin(Body orig) {
