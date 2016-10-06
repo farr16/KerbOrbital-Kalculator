@@ -37,8 +37,7 @@ public class EjectionAngleDisplayCanvas extends View {
 
     private RectF bounds;
 
-    private Path arrowPath;
-    private Path shipPath;
+    private Path trianglePath;
 
     public EjectionAngleDisplayCanvas(Context c, AttributeSet attrs) {
         super(c, attrs);
@@ -76,8 +75,7 @@ public class EjectionAngleDisplayCanvas extends View {
 
         bounds = new RectF (0f, 0f, 0f, 0f);
 
-        arrowPath = new Path();
-        shipPath = new Path();
+        trianglePath = new Path();
     }
 
     @Override
@@ -132,11 +130,13 @@ public class EjectionAngleDisplayCanvas extends View {
         bounds.set(x-angleRad, y-angleRad, x+angleRad, y+angleRad);
         canvas.drawArc(bounds, ejectDisplayAngle, -ejectionAngle, false, angleDisplayPaint);
 
+        // Draw display of the ejection angle in degrees
         angleRad *= 1.3f;
         float textX = x + (float) Math.cos(Math.toRadians(textAngleOffset)) * angleRad;
         float textY = y + (float) Math.sin(Math.toRadians(textAngleOffset)) * angleRad;
         canvas.drawText(ejectionAngle + "°", textX, textY, labelPaint);
 
+        // Draw circle representing the origin body
         float originRad = minDim/8;
         originPaint.setColor(origin.color);
         originPaint.setStyle(Paint.Style.FILL);
@@ -144,39 +144,53 @@ public class EjectionAngleDisplayCanvas extends View {
 
         canvas.drawText(origin.name, x, y, originLabelPaint);
 
-
+        // Draw circle representing player ship's orbit around the origin body
         float orbitRad = originRad * 1.75f;
         canvas.drawCircle(x,y,orbitRad, orbitPaint);
 
         // Draw triangle representing the player's craft in the view
-        shipPath.reset();
         float triSize = 15f;
         float triCenX = (float) (x + Math.cos(Math.toRadians(ejectDisplayAngle)) * orbitRad);
         float triCenY = (float) (y +Math.sin(Math.toRadians(ejectDisplayAngle)) * orbitRad);
-        shipPath.moveTo(triCenX, triCenY - triSize/2);
-        shipPath.lineTo(triCenX - triSize/2, triCenY + triSize/2);
-        shipPath.lineTo(triCenX + triSize/2, triCenY + triSize/2);
-        canvas.rotate(ejectDisplayAngle, triCenX, triCenY);
-        canvas.drawPath(shipPath, shipPaint);
-        canvas.rotate(-ejectDisplayAngle, triCenX, triCenY);
+        drawRotatedTriangle(canvas, triCenX, triCenY, triSize, ejectDisplayAngle, shipPaint);
 
         // Draw arrow showing the direction of the ship's orbit around the origin body
-        arrowPath.reset();
         float arcRadius = orbitRad * 1.25f;
         bounds.set(x-arcRadius, y-arcRadius, x+arcRadius, y+arcRadius);
         float coverage = -30f;
-
+        // Draw arrow arc
         arrowPaint.setStyle(Paint.Style.STROKE);
         canvas.drawArc(bounds, ejectDisplayAngle - coverage/2, coverage, false, arrowPaint);
         triCenX = (float) (x + arcRadius*Math.cos(Math.toRadians(ejectDisplayAngle + coverage/2)));
         triCenY = (float) (y + arcRadius*Math.sin(Math.toRadians(ejectDisplayAngle + coverage/2)));
         triSize = 10f;
-        arrowPath.moveTo(triCenX, triCenY - triSize/2);
-        arrowPath.lineTo(triCenX - triSize/2, triCenY + triSize/2);
-        arrowPath.lineTo(triCenX + triSize/2, triCenY + triSize/2);
+        // Draw arrow head
         arrowPaint.setStyle(Paint.Style.FILL);
-        canvas.rotate(ejectDisplayAngle + coverage/2, triCenX, triCenY);
-        canvas.drawPath(arrowPath, arrowPaint);
+        drawRotatedTriangle(canvas, triCenX, triCenY, triSize, ejectDisplayAngle+coverage/2, arrowPaint);
+    }
+
+    /**
+     * drawRotatedTriangle
+     *
+     * Helper method for drawing a rotated triangle, used to draw the triangle representing the player
+     * ship and the head of the arrow representing the direction of the ship's orbit
+     *
+     * @param c canvas on which the triangle is drawn
+     * @param x x coordinate of the center-point of the triangle
+     * @param y y coordinate of the center-point of the triangle
+     * @param size half the height of the triangle
+     * @param angle angle the triangle should be rotated by
+     * @param paint paint used to draw the triangle, must be a fill-styled paint
+     */
+    private void drawRotatedTriangle(Canvas c, float x, float y, float size, float angle, Paint paint) {
+        trianglePath.reset();
+
+        trianglePath.moveTo(x, y - size/2);
+        trianglePath.lineTo(x - size/2, y + size/2);
+        trianglePath.lineTo(x + size/2, y + size/2);
+        c.rotate(angle, x, y);
+        c.drawPath(trianglePath, paint);
+        c.rotate(-angle, x, y);
     }
 
     public void setOrigin(Body orig) {
